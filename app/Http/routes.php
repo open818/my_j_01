@@ -20,3 +20,7 @@ Route::get('/', function () {
 });
 
 Route::auth();
+
+Route::get('/user/profile', "UserController@profile");
+
+Route::post('/user/saveProfile', "UserController@saveProfile");
