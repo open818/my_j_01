@@ -16,11 +16,32 @@ Route::get('/', function () {
         'logo'  => '',
         'main'  => '***网',
     ];
-    return view('pages.index',['main_config'=>['']]);
+
+    $panel = [
+        'center' => [
+            'width' => 9,
+        ],
+        'right' => [
+            'width' => 3,
+            'class' => 'home-no-padding',
+        ],
+    ];
+
+    //
+    $banners = [
+        ['img'=>'/img/banner/01.png','alt'=>'a','url'=>'http://www.baidu.com'],
+        ['img'=>'/img/banner/02.png','alt'=>'a','url'=>'http://www.baidu.com'],
+        ['img'=>'/img/banner/03.png','alt'=>'a','url'=>'http://www.baidu.com'],
+        ['img'=>'/img/banner/04.png','alt'=>'a','url'=>'http://www.baidu.com'],
+    ];
+    return view('pages.index',compact('panel', 'banners', 'main_config'));
 });
 
 Route::auth();
 
 Route::get('/user/profile', "UserController@profile");
+Route::get('/user/relevancy', "UserController@relevancy_company");
+Route::post('/user/relevancy', "UserController@saveRelevancy");
+
 
 Route::post('/user/saveProfile', "UserController@saveProfile");

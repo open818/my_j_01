@@ -99,5 +99,7 @@ class AuthController extends Controller
             'mobile' => $data['mobile'],
             'password' => bcrypt($data['password']),
         ]);
+
+        $this->redirectPath = 'pages.user_relevancy';
     }
 }

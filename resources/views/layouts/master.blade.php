@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{ App::getLocale() }}">
 <head>
 	@section('metaLabels')
 		<meta charset="utf-8">
@@ -15,17 +15,19 @@
 
 	{{-- CSS files --}}
 	{!! Html::style('/bower/bootstrap/dist/css/bootstrap.css') !!}
-	{!! Html::style('/css/app.css') !!}
 	@section('css')
 	{!! Html::style('/bower/font-awesome/css/font-awesome.min.css') !!}
+	{!! Html::style('/css/app.css') !!}
+	{!! Html::style('/css/carousel.css') !!}
 	@show
 
 	<!--[if lt IE 9]>
 		<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
 		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+
 	<![endif]-->
 </head>
-<body class="@section('body_css') root61 @show">
+<body>
 
 <section class = "@yield('page_class', 'home')">
 
@@ -91,7 +93,7 @@
 
 {!! Html::script('/bower/jquery/dist/jquery.min.js') !!}
 {!! Html::script('/bower/bootstrap/dist/js/bootstrap.min.js') !!}
-
+{!! Html::script('/js/app.js') !!}
 @section('scripts')
 @show
 

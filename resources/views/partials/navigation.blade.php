@@ -1,32 +1,30 @@
-@include('partials.menu_top')
-<div id="o-header-2016">
-    <div class="w" id="header-2016">
-        <div id="logo-2016" class="ld"><a href="/" hidefocus="true" ><img src="img/logo.gif" alt="京东"></a></div>
-        <!--logo end-->
-        <div id="search-2016">
-            <div class="i-search ld">
-                <div class="form">
-                    {!! Form::open(['url'=>'search', 'method'=>'get', 'name'=>'searchForm', 'id'=>'searchForm', 'onSubmit'=>'return checkSearchForm()']) !!}
-                        <input type="text" class="text" accesskey="s" id="key" autocomplete="off" name="keywords" id="keyword"
-                               placeholder="输入商户名、品牌、类目、联系人、商圈等关键词"
-                               value="@if(isset($search_keywords)){{$search_keywords}}@endif">
-                        <input type="submit" value="搜索" class="button">
+<div class="navbar-wrapper container"  style="padding-top: 20px;">
+    <nav class="navbar navbar-inverse navbar-static-top">
+        <div>
+            <div class="col-md-3">
+                <a href="/" hidefocus="true" ><img src="img/logo.gif" alt="京东"></a>
+            </div>
+
+            <div class="col-md-9">
+                <div class="col-md-9">
+                    {!! Form::open() !!}
+                    <div class="input-group">
+                        <input type="text" placeholder="输入商户名、品牌、产品、联系人或其他关键词" class="form-control">
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-primary">搜索</button>
+                        </span>
+                    </div>
+
                     {!! Form::close() !!}
                 </div>
-            </div>
-            @if(isset($searchkeywords))
-                <div id="hotwords">
-                    @foreach($searchkeywords as $key =>$val)
-                        @if($key == 0)
-                            <a href="search.php?keywords={{$val}}" target="_blank" style="color:#ff0000">{{$val}}</a>
-                        @else
-                            <a href="search.php?keywords={{$val}}" target="_blank">{{$val}}</a>
-                        @endif
-                    @endforeach
-                </div>
-            @endif
-        </div>
-        <!--search end-->
-    </div>
 
+                <div class="col-md-3 navbar-right">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa fa-btn fa-sign-in"></i> 发布商机
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </nav>
 </div>

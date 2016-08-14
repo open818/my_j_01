@@ -47,7 +47,7 @@
                         </button>
                     </span>
                 </div>
-                    @if ($errors->has('mobile'))
+                    @if ($errors->has('code'))
                         <span class="help-block">
                         <strong>{{ $errors->first('code') }}</strong>
                     </span>

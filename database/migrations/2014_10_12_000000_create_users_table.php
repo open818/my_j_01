@@ -90,6 +90,7 @@ class CreateUsersTable extends Migration
             $table->integer('user_id')->common('用户ID');
             $table->string('position', 30)->common('职位');
             $table->char('isadmin', 1)->common('是否管理员，Y/N');
+            $table->char('status', 1)->common('状态，0：作废 1：有效 2：申请中');
             $table->timestamps();
         });
 
@@ -133,6 +134,8 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
+
+        Schema::drop('keywords');
         Schema::drop('user');
         Schema::drop('business_circle');
         Schema::drop('brand');
