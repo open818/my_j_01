@@ -11,7 +11,7 @@ class Company extends BaseModel
      */
     public function employees()
     {
-        return $this->hasMany('App\Model\CompanyUser');
+        return $this->hasMany('App\Models\CompanyUser');
     }
 
     /**
@@ -19,7 +19,7 @@ class Company extends BaseModel
      */
     public function brands()
     {
-        return $this->belongsToMany('App\Model\Brand');
+        return $this->belongsToMany('App\Models\Brand');
     }
 
     /**
@@ -27,14 +27,14 @@ class Company extends BaseModel
      */
     public function categories()
     {
-        return $this->belongsToMany('App\Model\Category');
+        return $this->belongsToMany('App\Models\Category');
     }
 
     /**
-     * 获取企业经营的类目
+     * 获取企业经营的动态
      */
     public function dynamics()
     {
-        return $this->hasMany('App\Model\CompanyDynamic');
+        return $this->hasMany('App\Models\CompanyDynamic');
     }
 }

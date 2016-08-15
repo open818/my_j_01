@@ -62,15 +62,6 @@ class CreateUsersTable extends Migration
             $table->timestamps();
         });
 
-        //省市县区域
-        Schema::create('region', function (Blueprint $table) {
-            $table->integer('code')->common('编码');
-            $table->string('name', 50)->common('名称');
-            $table->integer('p_code')->common('上级编码');
-            $table->string('p_name', 200)->common('所有上级名称');
-            $table->primary('code');
-        });
-
         //公司企业
         Schema::create('company', function (Blueprint $table) {
             $table->increments('id');
@@ -79,7 +70,12 @@ class CreateUsersTable extends Migration
             $table->integer('business_circle_id')->nullable()->common('所属商圈');
             $table->integer('business_address')->nullable()->common('经营地址');
             $table->string('address_details', 200)->nullable()->common('地址详情');
+            $table->string('tel', 20)->nullable()->common('电话');
+            $table->string('fax', 20)->nullable()->common('传真');
+            $table->string('email', 50)->nullable()->common('邮箱');
+            $table->string('url', 50)->nullable()->common('网址');
             $table->string('gsxt_uuid', 32)->nullable()->common('工商网站UUID');
+            $table->char('status', 1)->common('状态，0：作废 1：有效 2：申请中');
             $table->timestamps();
         });
 

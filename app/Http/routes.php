@@ -39,9 +39,12 @@ Route::get('/', function () {
 
 Route::auth();
 
-Route::get('/user/profile', "UserController@profile");
-Route::get('/user/relevancy', "UserController@relevancy_company");
-Route::post('/user/relevancy', "UserController@saveRelevancy");
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/user/profile', "UserController@profile");
+    Route::get('/user/relevancy', "UserController@relevancy_company");
+    Route::post('/user/relevancy', "UserController@saveRelevancy");
+    Route::post('/user/saveProfile', "UserController@saveProfile");
 
-
-Route::post('/user/saveProfile', "UserController@saveProfile");
+    Route::get('/company/edit', "CompanyController@edit");
+    Route::post('/company/edit', "CompanyController@update");
+});

@@ -5,8 +5,7 @@
     </div>
 
     <div class="panel-body">
-        {{Auth::user()->name}}
-        <a href="/user/relevancy">企业关联</a>
-        <a href="/logout">退出</a>
+        <a href="/user/profile">{{Auth::user()->name}}</a>
+        <a href="/logout">用户退出</a>
     </div>
 </div>

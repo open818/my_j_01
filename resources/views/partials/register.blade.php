@@ -83,7 +83,7 @@
                 <a class="btn btn-link" href="{{ url('/password/reset') }}">忘记密码？</a>
             </div>
             <div class="col-md-5">
-                <a class="btn btn-link pull-right" href="{{ url('/login') }}">用户登录</a>
+                <a class="btn btn-link pull-right" href="{{ url('/') }}">用户登录</a>
             </div>
         </div>
     </form>

@@ -94,12 +94,12 @@ class AuthController extends Controller
      */
     protected function create(array $data)
     {
+        $this->redirectTo = '/user/relevancy';
+
         return User::create([
             'name' => $data['name'],
             'mobile' => $data['mobile'],
             'password' => bcrypt($data['password']),
         ]);
-
-        $this->redirectPath = 'pages.user_relevancy';
     }
 }
