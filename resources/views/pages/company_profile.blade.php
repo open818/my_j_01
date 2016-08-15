@@ -20,9 +20,9 @@
                 <label class="col-md-3 control-label">公司地址：</label>
                 <div class="col-md-7 form-inline">
                     <div id="company_distpicker" data-toggle="distpicker">
-                        <select class="form-control" data-province="---- 选择省 ----"></select>
-                        <select class="form-control" data-city="---- 选择市 ----"></select>
-                        <select name="business_address" class="form-control" data-district="---- 选择区 ----"></select>
+                        <select name="province" class="form-control" data-province="{{old('province')}}"></select>
+                        <select name="city" class="form-control" data-city="{{old('city')}}"></select>
+                        <select name="district" class="form-control" data-district="{{old('district')}}"></select>
                     </div>
                 </div>
             </div>
@@ -91,12 +91,16 @@
             <div class="form-group{{ $errors->has('url') ? ' has-error' : '' }}">
                 <label class="col-md-3 control-label">网址：</label>
                 <div class="col-md-7">
+                    <div class="input-group">
+                    <span class="input-group-addon">http://</span>
                     <input type="text" class="form-control" name="url" value="{{ old('url') }}">
-                    @if ($errors->has('url'))
+                    </div>
+                        @if ($errors->has('url'))
                         <span class="help-block">
                         <strong>{{ $errors->first('url') }}</strong>
                     </span>
                     @endif
+
                 </div>
             </div>
 
@@ -132,10 +136,7 @@
     <script>
         $('#company_distpicker').distpicker({
             placeholder: false,
-            valueType: 'code',
-            province: "{{old('province')}}",
-            city: "{{old('city')}}",
-            district: "{{old('district')}}"
+            type: "code",
         });
 
     </script>

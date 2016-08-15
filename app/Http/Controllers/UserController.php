@@ -113,7 +113,7 @@ class UserController extends Controller
             $company_user->status = 1;
             $company_user->save();
 
-            return '跳到维护企业界面';
+            return redirect('/company/edit');
         }else{
             //公司存在，添加用户
             $company_user = new CompanyUser();
