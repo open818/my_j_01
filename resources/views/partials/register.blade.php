@@ -1,8 +1,7 @@
 <!-- Register -->
-<div class="row">
-    <form action="register" class="form-horizontal" method="post">
-        {{ csrf_field() }}
-
+<div class="panel panel-default">
+    <div class="panel-body">
+        {!! Form::open(['url'=>'register', 'method'=>'post', 'class'=>'form-horizontal']) !!}
         <div class="form-group text-center">
             <h3><label>用户注册</label></h3>
         </div>
@@ -86,5 +85,6 @@
                 <a class="btn btn-link pull-right" href="{{ url('/') }}">用户登录</a>
             </div>
         </div>
-    </form>
+        {!! Form::close() !!}
+    </div>
 </div>

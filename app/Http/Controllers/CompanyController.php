@@ -32,6 +32,15 @@ class CompanyController extends Controller
 
         if(empty($request->session()->getOldInput())){
             $company = Company::findOrFail($companies[0]->company_id)->toArray();
+            if(!empty($company['business_address'])){
+                $strarr = explode(" ", $company['business_address']);
+                $company['province'] = $strarr[0];
+                $company['city'] = $strarr[1];
+                $company['district'] = $strarr[2];
+                if(!empty($company['url'])){
+                    $company['url'] = substr($company['url'], 7);
+                }
+            }
 
             $request->query->add($company);
             $request->flash();
@@ -44,6 +53,9 @@ class CompanyController extends Controller
     }
 
     public function update(Request $request){
+        if($request->has('url')){
+            $request->merge(['url'=>'http://'.$request->input('url')]);
+        }
         $v = Validator::make($request->all(), [
             'profile' => 'max:2000',
             'address_details'  => 'max:200',
@@ -58,6 +70,7 @@ class CompanyController extends Controller
             'fax.max' => '传真长度过长',
             'email.email' => '电子邮箱格式不对',
             'url.url' => '公司网址格式不正确',
+            'url.max' => '公司网址长度过长',
         ]);
 
         if ($v->fails()) {
@@ -72,10 +85,10 @@ class CompanyController extends Controller
             abort(404, '非法操作！');
         }
 
-        $company = Company::findOrFail($companies[0]->company_id)->toArray();
-
+        $company = Company::findOrFail($companies[0]->company_id);
+        
         //user update
-        $company->business_address = $request->input('business_address');
+        $company->business_address = $request->input('province').' '.$request->input('city').' '.$request->input('district');
         $company->address_details = $request->input('address_details');
         $company->business_circle_id = $request->input('business_circle_id');
         $company->tel = $request->input('tel');

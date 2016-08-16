@@ -39,7 +39,7 @@ class CreateUsersTable extends Migration
         Schema::create('business_circle', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 100)->common('商圈名称');
-            $table->integer('address_code')->nullable()->common('地址编码');
+            $table->string('address',200)->nullable()->common('地址编码');
             $table->string('address_details', 100)->nullable()->common('地址详情');
         });
 
@@ -68,14 +68,14 @@ class CreateUsersTable extends Migration
             $table->string('name', 200)->common('公司名称');
             $table->string('profile', 2000)->nullable()->common('公司简介');
             $table->integer('business_circle_id')->nullable()->common('所属商圈');
-            $table->integer('business_address')->nullable()->common('经营地址');
+            $table->string('business_address',200)->nullable()->common('经营地址');
             $table->string('address_details', 200)->nullable()->common('地址详情');
             $table->string('tel', 20)->nullable()->common('电话');
             $table->string('fax', 20)->nullable()->common('传真');
             $table->string('email', 50)->nullable()->common('邮箱');
             $table->string('url', 50)->nullable()->common('网址');
             $table->string('gsxt_uuid', 32)->nullable()->common('工商网站UUID');
-            $table->char('status', 1)->common('状态，0：作废 1：有效 2：申请中');
+            $table->char('status', 1)->default(2)->common('状态，0：作废 1：有效 2：申请中');
             $table->timestamps();
         });
 
@@ -95,7 +95,7 @@ class CreateUsersTable extends Migration
             $table->increments('id');
             $table->integer('company_id')->common('公司ID');
             $table->integer('brand_id')->common('品牌ID');
-            $table->char('status', 1)->common('状态，0：作废 1：有效 2：申请中');
+            $table->char('status', 1)->default(2)->common('状态，0：作废 1：有效 2：申请中');
             $table->timestamps();
         });
 
@@ -136,7 +136,6 @@ class CreateUsersTable extends Migration
         Schema::drop('business_circle');
         Schema::drop('brand');
         Schema::drop('category');
-        Schema::drop('region');
         Schema::drop('company');
         Schema::drop('company_user');
         Schema::drop('company_brand');
