@@ -127,7 +127,7 @@
                 <div class="col-md-9">
                     <select name="business_brand[]" class="form-control selectpicker" multiple data-live-search="true">
                         @foreach(\App\Helpers\BrandHelper::getAllBrand() as $brand)
-                            <option value="{{$brand->id}}" @if(strpos(','.old('business_brands').',' ,','.$brand->id.',')) selected @endif >{{$brand->name}}</option>
+                            <option value="{{$brand->id}}" @if(strpos(','.old('business_brands').',' ,','.$brand->id.',') !== false) selected @endif >{{$brand->name}}</option>
                         @endforeach
                     </select>
                 </div>
@@ -197,7 +197,8 @@
 
         var zNodes =[
                 @foreach(\App\Helpers\CategoryHelper::getAll() as $category)
-                {id:{{$category->id}}, pId:{{$category->p_id}}, name:"{{$category->name}}" @if($category->p_id == 0) ,nocheck:true @endif},
+                {id:{{$category->id}}, pId:{{$category->p_id}}, name:"{{$category->name}}"
+                @if($category->p_id == 0) ,nocheck:true @elseif(strpos(','.old('business_categories').',' ,','.$category->id.',') !== false) ,checked:true @endif},
                 @endforeach
         ];
 
@@ -240,6 +241,7 @@
 
         $(document).ready(function(){
             $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+            onCheck();
         });
     </script>
 @stop

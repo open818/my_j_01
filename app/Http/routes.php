@@ -47,4 +47,6 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/company/edit', "CompanyController@edit");
     Route::post('/company/edit', "CompanyController@update");
+
+    Route::get('/company/dynamic/add', "CompanyController@dynamic_add");
 });

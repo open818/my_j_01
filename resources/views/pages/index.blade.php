@@ -48,21 +48,10 @@
                         <div class="box">
                             <div class="picbox">
                                 <ul class="piclist mainlist">
-                                    <li>aaaaaa</li>
-                                    <li>aaaaaa</li>
-                                    <li>aaaaaa</li>
-                                    <li>aaaaaa</li>
-                                    <li>aaaaaa</li>
-                                    <li>aaaaaa</li>
-                                    <li>aaaaaa</li>
-                                    <li>aaaaaa</li>
-                                    <li>aaaaaa</li>
-                                    <li>aaaaaa</li>
-                                    <li>aaaaaa</li>
-                                    <li>aaaaaa</li>
-                                    <li>aaaaaa</li>
-                                    <li>aaaaaa</li>
-                                    <li>aaaaaa</li>
+                                    <li>所有</li>
+                                    @foreach(\App\Helpers\CategoryHelper::getCategory() as $category)
+                                        <li>{{$category->name}}</li>
+                                    @endforeach
                                 </ul>
                                 <ul class="piclist swaplist"></ul>
                             </div>

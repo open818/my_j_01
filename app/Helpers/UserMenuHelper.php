@@ -9,8 +9,18 @@ class UserMenuHelper
         $menu = [
             ['route' => '/',            'text' => '首页',              'icon' => 'glyphicon glyphicon-dashboard'],
             ['route' => '/user/profile',    'text' => '个人设置',        'icon' => 'glyphicon glyphicon-cog'],
-            ['route' => '/user/relevancy', 'text' => '企业关联', 'icon' => 'glyphicon glyphicon-tasks'],
+            ['route' => '/company/dynamic/add', 'text' => '发布求购', 'icon' => 'glyphicon glyphicon-cog'],
         ];
+
+        if (count(\Auth::user()->companies()) > 0) {
+            $menu = array_merge($menu, [
+                ['route' => '/company/dynamic/add', 'text' => '发布商机', 'icon' => 'glyphicon glyphicon-cog'],
+            ]);
+        }else{
+            $menu = array_merge($menu, [
+                ['route' => '/user/relevancy', 'text' => '企业关联', 'icon' => 'glyphicon glyphicon-tasks'],
+            ]);
+        }
 
         if (\Auth::user()->isAdmin()) {
             $menu = array_merge($menu, [

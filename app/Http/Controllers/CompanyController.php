@@ -102,4 +102,8 @@ class CompanyController extends Controller
 
         return redirect()->back();
     }
+
+    public function dynamic_add(){
+        return view('pages.company_dynamic_add');
+    }
 }
