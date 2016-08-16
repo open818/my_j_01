@@ -73,7 +73,7 @@ class CompanyController extends Controller
         }
 
         $company = Company::findOrFail($companies[0]->company_id)->toArray();
-        
+
         //user update
         $company->business_address = $request->input('business_address');
         $company->address_details = $request->input('address_details');
