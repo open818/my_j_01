@@ -11,6 +11,8 @@
     "bootstrap": "^3.3.7",
     "font-awesome": "^4.6.3",
     "bootstrap-fileinput": "^4.3.4",
-    "distpicker": "^1.0.4"
+    "distpicker": "^1.0.4",
+    "bootstrap-select": "^1.10.0",
+    "ztree": "^3.5.0"
   }
 }

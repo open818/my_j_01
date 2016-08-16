@@ -96,6 +96,8 @@ class CompanyController extends Controller
         $company->email = $request->input('email');
         $company->url = $request->input('url');
         $company->profile = $request->input('profile');
+        $company->business_brands = empty($request->input('business_brand'))?null:implode(',',$request->input('business_brand'));
+        $company->business_categories = $request->input('business_categories');
         $company->save();
 
         return redirect()->back();

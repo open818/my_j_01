@@ -74,6 +74,8 @@ class CreateUsersTable extends Migration
             $table->string('fax', 20)->nullable()->common('传真');
             $table->string('email', 50)->nullable()->common('邮箱');
             $table->string('url', 50)->nullable()->common('网址');
+            $table->string('business_brands')->nullable()->common('经营品牌');
+            $table->string('business_categories')->nullable()->common('经营类目');
             $table->string('gsxt_uuid', 32)->nullable()->common('工商网站UUID');
             $table->char('status', 1)->default(2)->common('状态，0：作废 1：有效 2：申请中');
             $table->timestamps();
@@ -86,24 +88,6 @@ class CreateUsersTable extends Migration
             $table->integer('user_id')->common('用户ID');
             $table->string('position', 30)->common('职位');
             $table->char('isadmin', 1)->common('是否管理员，Y/N');
-            $table->char('status', 1)->common('状态，0：作废 1：有效 2：申请中');
-            $table->timestamps();
-        });
-
-        //企业经营品牌
-        Schema::create('company_brand', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('company_id')->common('公司ID');
-            $table->integer('brand_id')->common('品牌ID');
-            $table->char('status', 1)->default(2)->common('状态，0：作废 1：有效 2：申请中');
-            $table->timestamps();
-        });
-
-        //企业经营类目
-        Schema::create('company_category', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('company_id')->common('公司ID');
-            $table->integer('category_id')->common('分类ID');
             $table->char('status', 1)->common('状态，0：作废 1：有效 2：申请中');
             $table->timestamps();
         });
@@ -138,8 +122,6 @@ class CreateUsersTable extends Migration
         Schema::drop('category');
         Schema::drop('company');
         Schema::drop('company_user');
-        Schema::drop('company_brand');
-        Schema::drop('company_category');
         Schema::drop('company_dynamic');
     }
 }
