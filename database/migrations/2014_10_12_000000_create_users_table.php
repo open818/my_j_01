@@ -20,6 +20,16 @@ class CreateUsersTable extends Migration
             $table->integer('count')->common('次数');
         });
 
+        //update_files
+        Schema::create('update_files', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name', 100)->common('原文件名');
+            $table->string('path',200)->common('存储路径');
+            $table->string('ext', 10)->common('扩展名');
+            $table->integer('user_id')->common('上传用户');
+            $table->timestamps();
+        });
+
         //个人用户
         Schema::create('user', function (Blueprint $table) {
             $table->increments('id');
@@ -100,8 +110,8 @@ class CreateUsersTable extends Migration
             $table->integer('brand_id')->nullable()->common('所属品牌');
             $table->integer('category_id')->nullable()->common('所属类目');
             $table->text('content')->common('内容');
+            $table->text('attachments')->nullable()->common('附件');
             $table->date('exp_date')->nullable()->common('失效日期');
-            $table->char('status', 1)->common('状态，0：作废 1：有效 2：申请中');
             $table->integer('user_id')->common('创建人/联系人');
             $table->timestamps();
         });
@@ -116,6 +126,7 @@ class CreateUsersTable extends Migration
     {
 
         Schema::drop('keywords');
+        Schema::drop('update_files');
         Schema::drop('user');
         Schema::drop('business_circle');
         Schema::drop('brand');

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\File;
 use App\Models\BusinessCircle;
 use App\Models\Company;
+use App\Models\CompanyDynamic;
 use App\Models\CompanyUser;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -105,5 +106,51 @@ class CompanyController extends Controller
 
     public function dynamic_add(){
         return view('pages.company_dynamic_add');
+    }
+
+    public function dynamic_create(Request $request){
+        $v = Validator::make($request->all(), [
+            'type' => 'required|max:1|in:1,2',
+            'exp_date'  => 'date|date_format:Y-m-d',
+            'content'  => 'required|max:2000'
+        ],[
+            'type.required' => '必须选择类型',
+            'type.max' => '非法操作',
+            'type.in' => '非法操作',
+            'exp_date.date' => '失效日期不对',
+            'exp_date.date_format' => '失效日期不对',
+            'content.required' => '内容不能为空',
+            'content.max' => '内容长度过长',
+        ]);
+
+        if ($v->fails()) {
+            $this->throwValidationException($request, $v);
+        }
+
+        $companies = Auth::user()->companies();
+        if(empty($companies) || count($companies) > 1){
+            abort(404, '非法操作！');
+        }
+
+        $dynamic = new CompanyDynamic();
+
+        //user update
+        $dynamic->company_id = $companies[0]->company_id;
+        $dynamic->type = $request->input('type');
+        $dynamic->content = $request->input('content');
+        $dynamic->attachments = $request->input('attachments');
+        if(!empty($request->input('exp_date'))){
+            $dynamic->exp_date = $request->input('exp_date');
+        }
+        $dynamic->user_id = Auth::user()->id;
+        $dynamic->save();
+
+        return redirect('/');
+    }
+
+    public function uploadAttachment(Request $request)
+    {
+        $name = File::section('dynamic_attachment')->upload($request->file('attachment'));
+        return json_encode($name);
     }
 }

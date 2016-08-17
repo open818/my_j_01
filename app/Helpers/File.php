@@ -8,6 +8,7 @@ namespace App\Helpers;
  * @author  Gustavo Ocanto <gustavoocanto@gmail.com>
  */
 
+use App\Models\UpdateFile;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class File
@@ -29,6 +30,9 @@ class File
     private static $sections =
     [
         'default'          => ['path' => '', 'type' => 'all', 'valid' => '/[\.\/](.+)$/i'],
+        'dynamic_attachment' => ['path' => 'company/dynamic/attachment', 'type' => 'all', 'code' => true, 'valid' => '/[\.\/](.+)$/i'],
+
+
         'img'              => ['path' => 'img', 'type' => 'img', 'code' => true, 'valid' => '/[\.\/](jpe?g|png)$/i', 'maxwidth' => 2048],
         'category_img'     => ['path' => 'img/categories/image', 'type' => 'img', 'valid' => '/[\.\/](jpe?g|png)$/i', 'maxwidth' => 600, 'square' => true],
         'profile_img'      => ['path' => 'img/profile', 'type' => 'img', 'code' => true, 'valid' => '/[\.\/](jpe?g|png)$/i', 'maxwidth' => 600, 'square' => true],
@@ -147,8 +151,19 @@ class File
                 //normalization of the file sent
                 $this->normalice("$path/$file_destiny");
 
+                $recode = new UpdateFile();
+                $recode->name = $info->basename;
+                $recode->path = (explode(self::$default_path, str_replace('\\', '/', $return))[1]);
+                $recode->ext = $info->extension;
+                if(\Auth::user()){
+                    $recode->user_id = \Auth::user()->id;
+                }else{
+                    $recode->user_id = 0;
+                }
+                $recode->save();
+
                 //keeping the uploaded file path
-                $uploaded[] = (explode(self::$default_path, str_replace('\\', '/', $return))[1]);
+                $uploaded[] = ['path'=>$recode->path, 'id'=>$recode->id];
             } else {
                 $MaxFilesize = self::formatBytes($file->getMaxFilesize());
                 $uploaded[] = 'Error: '."文件大小已超过{$MaxFilesize}最大值";

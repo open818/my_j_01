@@ -4,6 +4,8 @@
     @parent
     {!! Html::style('/bower/bootstrap-select/dist/css/bootstrap-select.min.css') !!}
     {!! Html::style('/bower/ztree/css/zTreeStyle/zTreeStyle.css') !!}
+    {!! Html::style('/bower/jquery-ui/themes/base/jquery-ui.min.css') !!}
+    {!! Html::style('/bower/bootstrap-fileinput/css/fileinput.min.css') !!}
 @show
 
 @section('center_content')
@@ -14,64 +16,30 @@
 
         <div class="panel-body">
             {!! Form::open(['url'=>'company/dynamic/add', 'method'=>'post',  'class'=>'form-horizontal']) !!}
-            <div class="form-group">
-                <label class="col-md-3 control-label">类型：</label>
-                <div class="col-md-9">
-                    <div class="radio">
-                        <label>
-                            <input type="radio" checked value="1" name="type">我在销售
-                        </label>
-                    </div>
-
-                    <div class="radio">
-                        <label>
-                            <input type="radio" checked value="1" name="type">我在求购
-                        </label>
-                    </div>
+            <div class="form-group form-inline">
+                <div class="radio">
+                    <label class="control-label">类型：</label>
+                    <label><input type="radio" checked value="1" name="type">我在销售</label>
+                    <label><input type="radio" checked value="2" name="type">我在求购</label>
                 </div>
+
+                <div class="radio" style="margin-top: 0px">
+                    <label class="control-label">失效期：</label>
+                    <input type='text' placeholder="不填即长期有效" readonly name="exp_date" id="exp_date" class="form-control" />
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa fa-btn fa-sign-in"></i> 发布
+                </button>
             </div>
 
             <div class="form-group">
-                <label class="col-md-3 control-label">归属品牌：</label>
-                <div class="col-md-9">
-                    <select name="brand_id" class="form-control selectpicker" data-live-search="true">
-                        @foreach(\App\Helpers\BrandHelper::getAllBrand() as $brand)
-                            <option value="{{$brand->id}}" @if(old('brand->id') == $brand->id) selected @endif >{{$brand->name}}</option>
-                        @endforeach
-                    </select>
-                </div>
+                <textarea class="form-control" rows="5" name="content"></textarea>
             </div>
 
             <div class="form-group">
-                <label class="col-md-3 control-label">归属类目：</label>
-                <div class="col-md-9">
-                    <input type="text" placeholder="请点击选择" class="selectcategory form-control" readonly>
-                    <input type="hidden" name="business_categories" id="business_categories">
-                    <div id="menuContent" class="menuContent" style="display:none; position: absolute;z-index: 1000;">
-                        <ul id="treeDemo" class="ztree" style="margin-top:0; width:180px; height: 300px;"></ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group{{ $errors->has('address_details') ? ' has-error' : '' }}">
-                <label class="col-md-3 control-label">详细地址：</label>
-                <div class="col-md-9">
-                    <input type="text" class="form-control" name="address_details" value="{{ old('address_details') }}">
-
-                    @if ($errors->has('address_details'))
-                        <span class="help-block">
-                        <strong>{{ $errors->first('address_details') }}</strong>
-                    </span>
-                    @endif
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-md-9 col-md-offset-3">
-                    <button type="submit" class="btn btn-primary btn-block">
-                        <i class="fa fa-btn fa-sign-in"></i> 发布
-                    </button>
-                </div>
+                <input id="input-id" name="attachment" type="file" multiple>
+                <input id="attachments" name="attachments" type="hidden">
             </div>
 
             {!! Form::close() !!}
@@ -84,11 +52,29 @@
     {!! Html::script('/bower/bootstrap-select/dist/js/bootstrap-select.min.js') !!}
     {!! Html::script('/bower/ztree/js/jquery.ztree.core-3.5.min.js') !!}
     {!! Html::script('/bower/ztree/js/jquery.ztree.excheck-3.5.min.js') !!}
+    {!! Html::script('/bower/jquery-ui/jquery-ui.min.js') !!}
+    {!! Html::script('/bower/jquery-ui/ui/i18n/datepicker-zh-CN.js') !!}
+    {!! Html::script('/bower/bootstrap-fileinput/js/fileinput.min.js') !!}
+    {!! Html::script('/bower/bootstrap-fileinput/themes/fa/theme.js') !!}
+    {!! Html::script('/bower/bootstrap-fileinput/js/locales/zh.js') !!}
     <script>
         $('.selectpicker').selectpicker({noneSelectedText:'请选择'});
 
         $('.selectcategory').click(function(){
             showMenu(this);
+        });
+
+        $('#exp_date').datepicker({
+            dateFormat: 'yy-mm-dd',
+            showButtonPanel:true,
+            minDate: 0,
+            closeText: '清除',
+            onClose: function (dateText, inst) {
+                if ($(window.event.srcElement).hasClass('ui-datepicker-close'))
+                {
+                    document.getElementById(this.id).value = '';
+                }
+            }
         });
 
         var setting = {
@@ -153,6 +139,32 @@
                 hideMenu();
             }
         }
+
+        $("#input-id").fileinput({
+            language: 'zh',
+            uploadUrl: "/company/dynamic/upload",
+            maxFileCount: 5,
+            showUpload: true, //是否显示上传按钮
+            showCaption: false,//是否显示标题
+            dropZoneEnabled: false,
+            browseLabel: '附件 &hellip;',
+            uploadExtraData:{'_token':'{{csrf_token()}}' },
+            maxFileSize: 1024*2
+            /*validateInitialCount: true,*/
+        }).on("fileuploaded", function (event, data) {
+            //异步上传后返回结果处理
+            //后台一定要返回json对象,空的也行。否则会出现提示警告。
+            //返回对象的同时会显示进度条，可以根据返回值进行一些功能扩展
+            console.log(data);
+            if(data.response.id){
+                var v = $('#attachments').val();
+                if(v.length > 0){
+                    v = v + ',';
+                }
+                v = v+data.response.id;
+                $('#attachments').attr('value', v);
+            }
+        });
 
         $(document).ready(function(){
             $.fn.zTree.init($("#treeDemo"), setting, zNodes);

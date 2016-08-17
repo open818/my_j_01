@@ -1,5 +1,10 @@
 @extends('layouts.user_master')
 
+@section('css')
+    @parent
+    {!! Html::style('/bower/bootstrap-fileinput/css/fileinput.min.css') !!}
+@show
+
 @section('center_content')
     <div class="panel panel-default">
         <div class="panel-heading">
