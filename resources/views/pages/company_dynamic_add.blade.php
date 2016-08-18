@@ -28,13 +28,13 @@
                     <input type='text' placeholder="不填即长期有效" readonly name="exp_date" id="exp_date" class="form-control" />
                 </div>
 
-                <button type="submit" class="btn btn-primary">
+                <button type="button" id="btn_submit" class="btn btn-primary">
                     <i class="fa fa-btn fa-sign-in"></i> 发布
                 </button>
             </div>
 
             <div class="form-group">
-                <textarea class="form-control" rows="5" name="content"></textarea>
+                <textarea class="form-control" rows="5" id="content" name="content"></textarea>
             </div>
 
             <div class="form-group">
@@ -164,6 +164,22 @@
                 v = v+data.response.id;
                 $('#attachments').attr('value', v);
             }
+        });
+
+        $('#btn_submit').click(function(){
+            if($("#content").val().trim().length == 0){
+                alert('内容不能为空！');
+                return;
+            }
+
+            cn = $("#input-id").fileinput('getFilesCount');
+            if(cn > 0){
+                if(!confirm("还有"+cn+"个文件未点击上传，确定要发布数据吗？"))
+                {
+                    return ;
+                }
+            }
+            this.form.submit();
         });
 
         $(document).ready(function(){
