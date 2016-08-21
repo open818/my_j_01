@@ -11,7 +11,7 @@
 	@show
 
 	<link rel="icon" href="favicon.ico">
-	<title>@section('title') 友商 @show</title>
+	<title>@section('title') 商有道 @show</title>
 
 	{{-- CSS files --}}
 	{!! Html::style('/bower/bootstrap/dist/css/bootstrap.css') !!}

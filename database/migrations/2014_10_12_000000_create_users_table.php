@@ -86,7 +86,7 @@ class CreateUsersTable extends Migration
             $table->string('url', 50)->nullable()->common('网址');
             $table->string('business_brands')->nullable()->common('经营品牌');
             $table->string('business_categories')->nullable()->common('经营类目');
-            $table->string('gsxt_uuid', 32)->nullable()->common('工商网站UUID');
+            $table->string('gsxt_url', 200)->nullable()->common('工商网站URL');
             $table->char('status', 1)->default(2)->common('状态，0：作废 1：有效 2：申请中');
             $table->timestamps();
         });

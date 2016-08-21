@@ -37,6 +37,8 @@ Route::get('/', function () {
     return view('pages.index',compact('panel', 'banners', 'main_config'));
 });
 
+Route::get('/company/show/{id}/{tab?}', 'CompanyController@show');
+
 Route::auth();
 
 Route::group(['middleware' => 'auth'], function () {

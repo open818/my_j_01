@@ -15,22 +15,6 @@ class Company extends BaseModel
     }
 
     /**
-     * 获取企业代理的品牌
-     */
-    public function brands()
-    {
-        return $this->belongsToMany('App\Models\Brand');
-    }
-
-    /**
-     * 获取企业经营的类目
-     */
-    public function categories()
-    {
-        return $this->belongsToMany('App\Models\Category');
-    }
-
-    /**
      * 获取企业经营的动态
      */
     public function dynamics()

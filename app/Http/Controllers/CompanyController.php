@@ -148,9 +148,36 @@ class CompanyController extends Controller
         return redirect('/');
     }
 
+    /**
+     * 企业动态上传附件
+     * @param Request $request
+     * @return mixed|string
+     */
     public function uploadAttachment(Request $request)
     {
         $name = File::section('dynamic_attachment')->upload($request->file('attachment'));
         return json_encode($name);
+    }
+
+    public function show($id, $tab=1){
+        $panel = [
+            'left' => [
+                'width' => 4,
+                'class' => 'home-no-padding',
+            ],
+
+            'center' => [
+                'width' => 8,
+            ],
+        ];
+
+        if($tab == 1){
+            $company = Company::with('employees','dynamics')->find($id);
+            return view('pages.company_show', compact('panel','company','tab'));
+        }elseif($tab == 2){
+            $company = Company::find($id);
+            return view('pages.company_show', compact('panel','company', 'tab'));
+        }
+
     }
 }

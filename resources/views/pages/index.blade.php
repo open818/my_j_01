@@ -61,7 +61,7 @@
                     </div>
                 </div>
 
-                @include('partials.company_dynamic')
+                @include('partials.category_dynamic')
             @stop {{-- end center_content --}}
 
 
