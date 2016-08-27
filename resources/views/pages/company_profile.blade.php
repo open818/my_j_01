@@ -26,8 +26,8 @@
                 <label class="col-md-3 control-label">公司地址：</label>
                 <div class="col-md-9 form-inline">
                     <div id="company_distpicker" data-toggle="distpicker">
-                        <select name="province" class="form-control" data-province="{{old('province')}}"></select>
-                        <select name="city" class="form-control" data-city="{{old('city')}}"></select>
+                        <select id="province" name="province" class="form-control distpicker_change" data-province="{{old('province')}}"></select>
+                        <select id="city" name="city" class="form-control distpicker_change" data-city="{{old('city')}}"></select>
                         <select name="district" class="form-control" data-district="{{old('district')}}"></select>
                     </div>
                 </div>
@@ -49,11 +49,8 @@
             <div class="form-group">
                 <label class="col-md-3 control-label">所属商圈：</label>
                 <div class="col-md-9">
-                    <select name="business_circle_id" class="form-control">
-                        <option value="">暂无</option>
-                        @foreach(\App\Helpers\BusinessCircleHelper::select(true) as $circle)
-                            <option @if(old('business_circle_id') == $circle['id']) selected @endif value="{{$circle['id']}}">{{$circle['name']}}</option>
-                        @endforeach
+                    <select id="business_circle" name="business_circle_id" class="form-control">
+
                     </select>
                 </div>
             </div>
@@ -166,8 +163,39 @@
     {!! Html::script('/bower/ztree/js/jquery.ztree.excheck-3.5.min.js') !!}
     <script>
 
+        function initBusinessCircle(select_id){
+            var circle = $('#business_circle');
+            circle.empty();
+            $("<option>暂无</option>").appendTo(circle);
+            var url = "/circle/dist";
+            if($('#province').val() != ''){
+                url = url + '/' + $('#province').val();
+                if($('#city').val() != ''){
+                    url = url + '/' + $('#city').val();
+                }
+            }
+            $.ajax({
+                type: 'GET',
+                url: url ,
+                success: function(data) {
+                    $.each(data,function(n,value){
+                        if(select_id == value.id){
+                            $("<option selected value='" + value.id + "'>" + value.name + "</option>").appendTo(circle);//动态添加Option子项
+                        }else{
+                            $("<option value='" + value.id + "'>" + value.name + "</option>").appendTo(circle);//动态添加Option子项
+                        }
+                    });
+                } ,
+                dataType: 'json'
+            });
+        }
+
         $('#company_distpicker').distpicker({
             placeholder: false
+        });
+
+        $('.distpicker_change').change(function(){
+            initBusinessCircle('');
         });
 
         $('.selectpicker').selectpicker({noneSelectedText:'请选择'});
@@ -241,6 +269,7 @@
 
         $(document).ready(function(){
             $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+            initBusinessCircle({{old('business_circle_id')}});
             onCheck();
         });
     </script>

@@ -9,9 +9,13 @@
         <div class="row panel panel-default">
             <div class="panel-body">
                 <h1>{{$company->name}}</h1>
-                经营地址：{{$company->business_address}}{{$company->address_details}}<br/>
+                经营地址：{{$company->business_address}}{{$company->address_details}}
+                @if($company->circle)
+                    ({{$company->circle->name}})
+                @endif
+                <br/>
                 联系电话：{{$company->tel}} 传真：{{$company->fax}}<br/>
-                电子邮箱：{{$company->email}} 网址：{{$company->url}}<br/>
+                电子邮箱：{{$company->email}} 网址：<a target="_blank" href="{{$company->url}}">{{$company->url}}</a><br/>
             </div>
         </div>
     </div>
@@ -22,7 +26,7 @@
         <ul class="tab-list" style="padding: 0">
             <li><a href="project_detail.html"><i class="fa fa-tag"></i> 基本信息</a>
             </li>
-            <li><a href="project_detail.html"><i class="fa fa-tag"></i> 工商信息</a>
+            <li><a href="{{$company->gsxt_url}}"><i class="fa fa-tag"></i> 工商信息</a>
             </li>
         </ul>
     </div>
@@ -38,15 +42,15 @@
             <div class="employees">
                 <div>
                     联系人：
-                    @if(!empty($company->employees))
-                        <ul>
-                            @foreach($company->employees as $employee)
-                                <li>
-                                    {{$employee->user->name}}/{{$employee->position}}
-                                </li>
-                            @endforeach
-                        </ul>
-                    @endif
+                    <table class="table table-hover">
+                        @foreach($company->employees as $employee)
+                            <tr>
+                                <td>{{$employee->user->name}}</td>
+                                <td>{{$employee->position}}</td>
+                                <td>{{$employee->user->mobile}}</td>
+                            </tr>
+                        @endforeach
+                    </table>
                 </div>
             </div>
         </div>

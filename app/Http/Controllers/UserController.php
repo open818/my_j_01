@@ -54,7 +54,7 @@ class UserController extends Controller
     }
 
     public function relevancy_company(){
-        $panel = [
+        /*$panel = [
             'left' => [
                 'width' => 3,
                 'class' => 'home-no-padding',
@@ -62,9 +62,20 @@ class UserController extends Controller
             'center' => [
                 'width' => 9,
             ],
-        ];
+        ];*/
 
-        return view('pages.user_relevancy',compact('panel'));
+        $companies = Auth::user()->companies();
+        if(count($companies) > 0){
+            if($companies[0]->status == 2){
+                //待审核,获取管理员信息
+                $admin = CompanyUser::where('company_id', $companies[0]->company_id)->where('isadmin','Y')->first()->user;
+                return view('pages.user_relevancy_view',compact('companies','admin'));
+            }else{
+                return view('pages.user_relevancy_view',compact('companies'));
+            }
+        }else{
+            return view('pages.user_relevancy');
+        }
     }
 
     public function saveRelevancy(Request $request){
@@ -124,7 +135,65 @@ class UserController extends Controller
             $company_user->status = 2;
             $company_user->save();
 
-            return '跳到提示界面';
+            return redirect('/user/relevancy');
         }
+    }
+
+    /**
+     *
+     */
+    public function getRelevancyUser(){
+        $companies = Auth::user()->companies();
+        $users = CompanyUser::with('user')->where('company_id', $companies[0]->company_id)->get();
+        return view('pages.company_user',compact('users'));
+    }
+
+    public function applyRelevancyUser($id){
+        $companies = Auth::user()->companies();
+        if($companies[0]->isadmin == 'N'){
+            return redirect()->back();
+        }
+
+        $user = CompanyUser::find($id);
+        if(!$user || $user->status != 2 || $user->company_id != $companies[0]->company_id){
+            return redirect()->back();
+        }
+        $user->status = 1;
+        $user->save();
+        return redirect()->back();
+    }
+
+    public function adminRelevancyUser($id){
+        $companies = Auth::user()->companies();
+        if($companies[0]->isadmin == 'N'){
+            return redirect()->back();
+        }
+
+        $user = CompanyUser::find($id);
+        if(!$user || $user->status != 1 || $user->company_id != $companies[0]->company_id){
+            return redirect()->back();
+        }
+        $user->isadmin = 'Y';
+        $user->save();
+
+        $my = Auth::user();
+        $my->isadmin = 'N';
+        $my->save();
+
+        return redirect()->back();
+    }
+
+    public function deleteRelevancyUser($id){
+        $companies = Auth::user()->companies();
+        if($companies[0]->isadmin == 'N'){
+            return redirect()->back();
+        }
+
+        $user = CompanyUser::find($id);
+        if(!$user || $user->isadmin == 'Y' || $user->company_id != $companies[0]->company_id){
+            return redirect()->back();
+        }
+        $user->delete();
+        return redirect()->back();
     }
 }

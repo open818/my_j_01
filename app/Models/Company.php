@@ -21,4 +21,8 @@ class Company extends BaseModel
     {
         return $this->hasMany('App\Models\CompanyDynamic');
     }
+
+    public function circle(){
+        return $this->belongsTo('App\Models\BusinessCircle','business_circle_id','id');
+    }
 }

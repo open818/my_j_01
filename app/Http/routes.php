@@ -38,6 +38,7 @@ Route::get('/', function () {
 });
 
 Route::get('/company/show/{id}/{tab?}', 'CompanyController@show');
+Route::get('/circle/dist/{province?}/{city?}/{district?}', 'BusinessCircleController@ajax_getBydist');
 
 Route::auth();
 
@@ -53,4 +54,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/company/dynamic/add', "CompanyController@dynamic_add");
     Route::post('/company/dynamic/add', "CompanyController@dynamic_create");
     Route::post('/company/dynamic/upload', "CompanyController@uploadAttachment");
+
+    Route::get('/company/relevancy/user', "UserController@getRelevancyUser");
+    Route::post('/company/relevancy/edit', "UserController@getRelevancyUser");
+    Route::post('/company/relevancy/apply', "UserController@getRelevancyUser");
+
+    Route::get('/company/relevancy/apply/{id}', "UserController@applyRelevancyUser");
+    Route::get('/company/relevancy/admin/{id}', "UserController@adminRelevancyUser");
+    Route::get('/company/relevancy/delete/{id}', "UserController@deleteRelevancyUser");
 });

@@ -33,6 +33,14 @@ class User extends Authenticatable
         return CompanyUser::where('user_id', $this->attributes['id'])->get();
     }
 
+    /**
+     * 获取用户有效企业列表
+     */
+    public function able_companies()
+    {
+        return CompanyUser::where('user_id', $this->attributes['id'])->where('status', 1)->get();
+    }
+
     public function isAdmin()
     {
         $companies = CompanyUser::where('user_id', $this->attributes['id'])->get();

@@ -172,7 +172,9 @@ class CompanyController extends Controller
         ];
 
         if($tab == 1){
-            $company = Company::with('employees','dynamics')->find($id);
+            $company = Company::with(['employees' => function($query){
+                $query->where('status', 1);
+            }],'dynamics')->find($id);
             return view('pages.company_show', compact('panel','company','tab'));
         }elseif($tab == 2){
             $company = Company::find($id);
