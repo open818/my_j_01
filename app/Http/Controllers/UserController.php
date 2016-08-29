@@ -176,11 +176,11 @@ class UserController extends Controller
         $user->isadmin = 'Y';
         $user->save();
 
-        $my = Auth::user();
+        $my = $companies[0];
         $my->isadmin = 'N';
         $my->save();
 
-        return redirect()->back();
+        return redirect('/');
     }
 
     public function deleteRelevancyUser($id){

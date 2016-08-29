@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\File;
+use App\Models\Brand;
 use App\Models\BusinessCircle;
+use App\Models\Category;
 use App\Models\Company;
 use App\Models\CompanyDynamic;
 use App\Models\CompanyUser;
@@ -159,6 +161,12 @@ class CompanyController extends Controller
         return json_encode($name);
     }
 
+    /**
+     * 企业展示
+     * @param $id
+     * @param int $tab
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function show($id, $tab=1){
         $panel = [
             'left' => [
@@ -174,7 +182,16 @@ class CompanyController extends Controller
         if($tab == 1){
             $company = Company::with(['employees' => function($query){
                 $query->where('status', 1);
-            }],'dynamics')->find($id);
+            }])->find($id);
+
+            if(!empty($company->business_brands)){
+                $company->business_brands = Brand::whereRaw('id in ('.$company->business_brands.')')->get();
+            }
+
+            if(!empty($company->business_categories)){
+                $company->business_categories = Category::whereRaw('id in ('.$company->business_categories.')')->get();
+            }
+            //dd($company);
             return view('pages.company_show', compact('panel','company','tab'));
         }elseif($tab == 2){
             $company = Company::find($id);
