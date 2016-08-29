@@ -34,31 +34,56 @@
 
 @section('panel_left_content')
     <div class="panel panel-default">
+        <div class="panel-heading">
+            公司简介
+        </div>
         <div class="panel-body">
-            <div class="profile">
-                公司简介：{{$company->profile}}
-            </div>
-
-            <div class="employees">
-                <div>
-                    联系人：
-                    <table class="table table-hover">
-                        @foreach($company->employees as $employee)
-                            <tr>
-                                <td>{{$employee->user->name}}</td>
-                                <td>{{$employee->position}}</td>
-                                <td>{{$employee->user->mobile}}</td>
-                            </tr>
-                        @endforeach
-                    </table>
-                </div>
-            </div>
+            {{$company->profile}}
         </div>
     </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            主营品牌
+        </div>
+        <div class="panel-body">
+            @php($i=1) @foreach($company->business_brands as $brand) {{$brand->name}} @if($i != count($company->business_brands)) 、@php($i++) @endif @endforeach
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            主营类目
+        </div>
+        <div class="panel-body">
+            @php($i=1) @foreach($company->business_categories as $cate) {{$cate->name}} @if($i != count($company->business_categories)) 、@php($i++) @endif @endforeach
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            联系人
+        </div>
+        <div class="panel-body">
+            <table class="table table-hover">
+                @foreach($company->employees as $employee)
+                    <tr>
+                        <td>{{$employee->user->name}}</td>
+                        <td>{{$employee->position}}</td>
+                        <td>{{$employee->user->mobile}}</td>
+                    </tr>
+                @endforeach
+            </table>
+        </div>
+    </div>
+
 @stop
 
 @section('center_content')
     <div class="panel panel-default">
+        <div class="panel-heading">
+            企业动态
+        </div>
         <div class="panel-body">
             @include("partials.company_dynamic", ['data'=>$company->dynamics])
         </div>
@@ -67,4 +92,6 @@
 
 @section('scripts')
     @parent
+
+
 @stop

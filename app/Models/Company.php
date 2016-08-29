@@ -19,7 +19,7 @@ class Company extends BaseModel
      */
     public function dynamics()
     {
-        return $this->hasMany('App\Models\CompanyDynamic');
+        return $this->hasMany('App\Models\CompanyDynamic', 'company_id', 'id');
     }
 
     public function circle(){

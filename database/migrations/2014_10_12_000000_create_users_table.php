@@ -68,7 +68,7 @@ class CreateUsersTable extends Migration
             $table->integer('level')->common('层级');
             $table->integer('p_id')->common('上级ID');
             $table->integer('seqno')->default(255)->common('排序号，最小排最前面');
-            $table->char('status', 1)->common('状态, 0: 作废 1: 有效');
+            $table->char('status', 1)->default(1)->common('状态, 0: 作废 1: 有效');
             $table->timestamps();
         });
 
