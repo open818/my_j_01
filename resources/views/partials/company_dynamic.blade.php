@@ -1,43 +1,30 @@
 <!-- Login -->
 <div class="company_dynamic">
-    @if(!empty($data))
+    <input type="hidden" id="lastTime" />
     <ul class="list-group">
-        @foreach($data as $dynamic)
-        <li class="list-group-item">
-            <small class="block text-muted"><i class="fa fa-clock-o"></i> {{$dynamic->created_at}}</small>
-            <p>
-                {{$dynamic->content}}
-            </p>
-
-        </li>
-        @endforeach
     </ul>
-    @endif
 </div>
 
 <script>
     function loadDynamicData(){
-        var url = "/circle/dist";
-        if($('#province').val() != ''){
-            url = url + '/' + $('#province').val();
-            if($('#city').val() != ''){
-                url = url + '/' + $('#city').val();
-            }
-        }
+        time = $('#lastTime').val();
+        var url = "/company_dynamic/{{$data->id}}/"+time;
+
         $.ajax({
             type: 'GET',
             url: url ,
             success: function(data) {
+                var _ul = $('.company_dynamic > ul');
                 $.each(data,function(n,value){
-                    if(select_id == value.id){
-                        $("<option selected value='" + value.id + "'>" + value.name + "</option>").appendTo(circle);//动态添加Option子项
-                    }else{
-                        $("<option value='" + value.id + "'>" + value.name + "</option>").appendTo(circle);//动态添加Option子项
-                    }
+                    $("<li class=\"list-group-item\"><small class=\"block text-muted\"><i class=\"fa fa-clock-o\"></i>"+data.created_at+"</small><p>"+data.content+"</p></li>").appendTo(_ul);
                 });
             } ,
             dataType: 'json'
         });
     }
+
+    $(document).ready(function(){
+        loadDynamicData();
+    });
 
 </script>

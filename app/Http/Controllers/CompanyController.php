@@ -145,6 +145,7 @@ class CompanyController extends Controller
             $dynamic->exp_date = $request->input('exp_date');
         }
         $dynamic->user_id = Auth::user()->id;
+        $dynamic->user_name = Auth::user()->name;
         $dynamic->save();
 
         return redirect('/');

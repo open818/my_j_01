@@ -85,13 +85,38 @@
             企业动态
         </div>
         <div class="panel-body">
-            @include("partials.company_dynamic", ['data'=>$company->dynamics])
+            <div class="company_dynamic">
+                <input type="hidden" id="lastTime" />
+                <ul class="list-group">
+                </ul>
+            </div>
         </div>
     </div>
 @stop
 
 @section('scripts')
     @parent
+    <script>
+    function loadDynamicData(){
+        time = $('#lastTime').val();
+        var url = "/company_dynamic/{{$company->id}}/"+time;
 
+        $.ajax({
+            type: 'GET',
+            url: url ,
+            success: function(data) {
+            var _ul = $('.company_dynamic > ul');
+            $.each(data,function(n,value){
+            $("<li class=\"list-group-item\"><small class=\"block text-muted\"><i class=\"fa fa-clock-o\"></i>"+value.created_at+"</small><p>"+value.content+"</p></li>").appendTo(_ul);
+            });
+            } ,
+            dataType: 'json'
+        });
+    }
+
+    $(document).ready(function(){
+        loadDynamicData();
+    });
+    </script>
 
 @stop

@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\Company;
 use App\Models\CompanyDynamic;
 use App\Models\CompanyUser;
+use App\Models\UpdateFile;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -26,6 +27,12 @@ class CompanyDynamicController extends Controller
             $lastTime = Carbon::now();
         }
         $rs = CompanyDynamic::where('company_id', $company_id)->where('created_at', '<', $lastTime)->orderby('created_at', 'desc')->take($this->page_size)->get();
+        foreach($rs as &$dynamic){
+            if(!empty($dynamic->attachments)){
+                $attachments = UpdateFile::whereRaw('id in ('. $dynamic->attachments.')');
+                $dynamic->attachments = $attachments;
+            }
+        }
 
         return response()->json($rs);
     }

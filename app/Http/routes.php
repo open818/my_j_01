@@ -39,7 +39,7 @@ Route::get('/', function () {
 
 Route::get('/company/show/{id}/{tab?}', 'CompanyController@show');
 Route::get('/circle/dist/{province?}/{city?}/{district?}', 'BusinessCircleController@ajax_getBydist');
-Route::get('/company/dynamic/{company_id}/{lastTime?}', 'CompanyDynamicController@ajax_getByCompany');
+Route::get('/company_dynamic/{company_id}/{lastTime?}', 'CompanyDynamicController@ajax_getByCompany');
 
 Route::auth();
 
