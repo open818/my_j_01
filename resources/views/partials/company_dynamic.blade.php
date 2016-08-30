@@ -15,9 +15,9 @@
                     <div class="file-box">
                         <div class="file">
                             <span class="corner"></span>
-                            @if(in_array($att->ext,array('png','jpg')))
+                            @if(in_array($att->ext,array('png','jpg','gif')))
                             <div class="image">
-                                <img style="max-width: 200px;max-height: 200px;" alt="image" class="img-responsive" src="img/{{$att->path}}">
+                                <img alt="image" class="img-responsive" src="img/{{$att->path}}">
                             </div>
                             @else
                             <div class="icon">

@@ -97,23 +97,50 @@
 @section('scripts')
     @parent
     <script>
-    function loadDynamicData(){
-        time = $('#lastTime').val();
-        var url = "/company_dynamic/{{$company->id}}/"+time;
+    var lastTime = '';
+    var loading = false;
 
-        $.ajax({
-            type: 'GET',
-            url: url ,
-            success: function(data) {
-            var _ul = $('.company_dynamic > ul');
-                $(data.html).appendTo(_ul);
-            } ,
-            dataType: 'json'
-        });
+    function loadDynamicData(){
+        if(!loading){
+            loading = true;
+            var url = "/company_dynamic/{{$company->id}}/"+lastTime;
+
+            $.ajax({
+                type: 'GET',
+                url: url ,
+                success: function(data) {
+                    var _ul = $('.company_dynamic > ul');
+                    $(data.html).appendTo(_ul);
+                    lastTime = data.lastTime;
+                    loading = false;
+                } ,
+                dataType: 'json'
+            });
+
+        }
     }
 
     $(document).ready(function(){
         loadDynamicData();
+
+        var range = 50;             //距下边界长度/单位px
+        var elemt = 500;           //插入元素高度/单位px
+        var maxnum = 20;            //设置加载最多次数
+        var num = 1;
+        var totalheight = 0;
+        var main = $("#content");                     //主体元素
+        $(window).scroll(function(){
+            var srollPos = $(window).scrollTop();    //滚动条距顶部距离(页面超出窗口的高度)
+
+            //console.log("滚动条到顶部的垂直高度: "+$(document).scrollTop());
+            //console.log("页面的文档高度 ："+$(document).height());
+            //console.log('浏览器的高度：'+$(window).height());
+
+            totalheight = parseFloat($(window).height()) + parseFloat(srollPos);
+            if(($(document).height()-range) <= totalheight) {
+                loadDynamicData();
+            }
+        });
     });
     </script>
 

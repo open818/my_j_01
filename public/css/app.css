@@ -7316,3 +7316,33 @@ ul.tab-list li {  list-style: none;  }
   margin-top: 5px;
   display: block;
 }
+
+.file-box {
+  float: left;
+  width: 220px;
+}
+
+.file {
+  border: 1px solid #e7eaec;
+  padding: 0;
+  background-color: #fff;
+  position: relative;
+  margin-bottom: 20px;
+  margin-right: 20px;
+}
+
+.file .icon {
+  padding: 15px 10px;
+  text-align: center;
+}
+
+.file .icon, .file .image {
+  height: 100px;
+  overflow: hidden;
+}
+
+.file .file-name {
+  padding: 10px;
+  background-color: #f8f8f8;
+  border-top: 1px solid #e7eaec;
+}

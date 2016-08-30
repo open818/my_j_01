@@ -19,7 +19,7 @@ use \Validator;
 
 class CompanyDynamicController extends Controller
 {
-    private $page_size = 20;
+    private $page_size = 2;
 
     public function ajax_getByCompany($company_id, $lastTime = '')
     {
@@ -36,6 +36,6 @@ class CompanyDynamicController extends Controller
         //dd($rs[1]->attachments);
 
         $view = view('partials.company_dynamic', ['data'=>$rs]);
-        return response()->json(['html'=> (string)$view]);
+        return response()->json(['html'=> (string)$view, 'lastTime'=>(string)($rs[count($rs)-1]->created_at)]);
     }
 }

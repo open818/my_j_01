@@ -140,7 +140,7 @@ class File
                 //destiny file
                 list($tmp1, $tmp2) = explode(' ', microtime());
                 $msec =  (float)sprintf('%.0f', (floatval($tmp1) + floatval($tmp2)) * 1000);
-                $file_destiny = md5($msec).'.'.$info->extension;
+                $file_destiny = md5($msec.mt_rand(0, 10000)).'.'.$info->extension;
 
                 //folder validation - if there is not folder, it will be created
                 if (!is_dir($path)) {
