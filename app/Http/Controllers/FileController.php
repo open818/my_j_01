@@ -52,11 +52,12 @@ class FileController extends Controller
         readfile("$path/$file");
     }
 
-    private function showImg($file, $resize = [])
+    public function showImg($file, $resize = [])
     {
+
         $path = storage_path().'/files';
 
-        $pathFile = $this->imgExist($path, $file, $resize);
+        $pathFile = $this->imgExist($path, $file, $resize);//dd($file);
 
         if (!$pathFile) {
             $pathFile = $path.'/img/no-image.jpg';
@@ -65,6 +66,8 @@ class FileController extends Controller
         $imginfo = getimagesize($pathFile);
         header('Content-type: '.$imginfo['mime']);
         readfile($pathFile);
+        /*$img_out_string = "header('Content-type:image/$fileType');
+        image$fileType(imagecreatefrom$fileType('$filename'));*/
     }
 
     /**

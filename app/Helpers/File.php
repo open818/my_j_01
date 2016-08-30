@@ -138,7 +138,9 @@ class File
                 $path = implode('/', $path);
 
                 //destiny file
-                $file_destiny = md5(time()).'.'.$info->extension;
+                list($tmp1, $tmp2) = explode(' ', microtime());
+                $msec =  (float)sprintf('%.0f', (floatval($tmp1) + floatval($tmp2)) * 1000);
+                $file_destiny = md5($msec).'.'.$info->extension;
 
                 //folder validation - if there is not folder, it will be created
                 if (!is_dir($path)) {
@@ -153,7 +155,7 @@ class File
 
                 $recode = new UpdateFile();
                 $recode->name = $info->basename;
-                $recode->path = (explode(self::$default_path, str_replace('\\', '/', $return))[1]);
+                $recode->path = substr(explode(self::$default_path, str_replace('\\', '/', $return))[1], 1);
                 $recode->ext = $info->extension;
                 if(\Auth::user()){
                     $recode->user_id = \Auth::user()->id;

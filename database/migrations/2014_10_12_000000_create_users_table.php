@@ -113,7 +113,7 @@ class CreateUsersTable extends Migration
             $table->text('attachments')->nullable()->common('附件');
             $table->date('exp_date')->nullable()->common('失效日期');
             $table->integer('user_id')->common('创建人/联系人');
-            $table->string('user_nane',20)->common('创建人/联系人');
+            $table->string('user_name',20)->common('创建人/联系人');
             $table->timestamps();
         });
     }

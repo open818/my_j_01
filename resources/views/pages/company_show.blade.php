@@ -38,7 +38,7 @@
             公司简介
         </div>
         <div class="panel-body">
-            {{$company->profile}}
+            <pre style="white-space: pre-wrap;word-wrap: break-word;border: 0px;line-height: 2;">{{$company->profile}}</pre>
         </div>
     </div>
 
@@ -70,7 +70,7 @@
                     <tr>
                         <td>{{$employee->user->name}}</td>
                         <td>{{$employee->position}}</td>
-                        <td>{{$employee->user->mobile}}</td>
+                        <td><i class="fa fa-phone"></i>{{$employee->user->mobile}}</td>
                     </tr>
                 @endforeach
             </table>
@@ -106,9 +106,7 @@
             url: url ,
             success: function(data) {
             var _ul = $('.company_dynamic > ul');
-            $.each(data,function(n,value){
-            $("<li class=\"list-group-item\"><small class=\"block text-muted\"><i class=\"fa fa-clock-o\"></i>"+value.created_at+"</small><p>"+value.content+"</p></li>").appendTo(_ul);
-            });
+                $(data.html).appendTo(_ul);
             } ,
             dataType: 'json'
         });

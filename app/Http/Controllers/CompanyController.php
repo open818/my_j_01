@@ -193,6 +193,11 @@ class CompanyController extends Controller
                 $company->business_categories = Category::whereRaw('id in ('.$company->business_categories.')')->get();
             }
             //dd($company);
+            /*if(!empty($company->profile)){
+                //$company->profile = htmlspecialchars(str_replace(chr(10).chr(13), '&lt;br&gt;', str_replace(' ','&nbsp;', $company->profile)));
+                $company->profile = str_replace("\r\n", "<br/>",htmlspecialchars($company->profile));
+                //$company->profile = str_replace(" ", "&nbsp;",htmlspecialchars($company->profile));
+            }*/
             return view('pages.company_show', compact('panel','company','tab'));
         }elseif($tab == 2){
             $company = Company::find($id);

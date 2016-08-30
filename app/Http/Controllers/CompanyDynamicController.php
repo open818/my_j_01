@@ -29,11 +29,13 @@ class CompanyDynamicController extends Controller
         $rs = CompanyDynamic::where('company_id', $company_id)->where('created_at', '<', $lastTime)->orderby('created_at', 'desc')->take($this->page_size)->get();
         foreach($rs as &$dynamic){
             if(!empty($dynamic->attachments)){
-                $attachments = UpdateFile::whereRaw('id in ('. $dynamic->attachments.')');
+                $attachments = UpdateFile::whereRaw('id in ('. $dynamic->attachments.')')->get();
                 $dynamic->attachments = $attachments;
             }
         }
+        //dd($rs[1]->attachments);
 
-        return response()->json($rs);
+        $view = view('partials.company_dynamic', ['data'=>$rs]);
+        return response()->json(['html'=> (string)$view]);
     }
 }
