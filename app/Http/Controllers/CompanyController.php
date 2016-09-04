@@ -9,7 +9,9 @@ use App\Models\Category;
 use App\Models\Company;
 use App\Models\CompanyDynamic;
 use App\Models\CompanyUser;
+use App\Models\UpdateFile;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use \Auth;
 use Illuminate\Support\Facades\Session;
@@ -17,6 +19,8 @@ use \Validator;
 
 class CompanyController extends Controller
 {
+    private $page_size = 2;
+
     public function __construct()
     {
 
@@ -204,5 +208,30 @@ class CompanyController extends Controller
             return view('pages.company_show', compact('panel','company', 'tab'));
         }
 
+    }
+
+    public function ajax_getIndexCompany($lastTime = ''){
+        if(empty($lastTime)){
+            $lastTime = Carbon::now();
+        }
+        $rs = CompanyDynamic::with('company')->where('created_at', '<', $lastTime)->orderby('created_at', 'desc')->take($this->page_size)->get();
+
+        foreach($rs as &$dynamic){
+            if(!empty($dynamic->attachments)){
+                $attachments = UpdateFile::whereRaw('id in ('. $dynamic->attachments.')')->get();
+                $dynamic->attachments = $attachments;
+            }
+
+            if(!empty($dynamic->company->business_brands)){
+                $dynamic->company->business_brands = Brand::whereRaw('id in ('.$dynamic->company->business_brands.')')->get();
+            }
+
+            if(!empty($dynamic->company->business_categories)){
+                $dynamic->company->business_categories = Category::whereRaw('id in ('.$dynamic->company->business_categories.')')->get();
+            }
+        }
+
+        $view = view('partials.dynamic', ['data'=>$rs]);
+        return response()->json(['html'=> (string)$view, 'lastTime'=>(string)($rs[count($rs)-1]->created_at)]);
     }
 }

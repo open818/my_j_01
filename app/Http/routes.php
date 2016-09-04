@@ -40,7 +40,9 @@ Route::get('/', function () {
 Route::get('/company/show/{id}/{tab?}', 'CompanyController@show');
 Route::get('/circle/dist/{province?}/{city?}/{district?}', 'BusinessCircleController@ajax_getBydist');
 Route::get('/company_dynamic/{company_id}/{lastTime?}', 'CompanyDynamicController@ajax_getByCompany');
+Route::get('/index/dynamic/{lastTime?}', 'CompanyController@ajax_getIndexCompany');
 Route::get('img/{file?}', 'FileController@showImg')->where('file', '(.*)');
+Route::get('file/{file?}', 'FileController@showFile')->where('file', '(.*)');
 
 Route::auth();
 

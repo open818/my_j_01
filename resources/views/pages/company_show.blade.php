@@ -35,15 +35,6 @@
 @section('panel_left_content')
     <div class="panel panel-default">
         <div class="panel-heading">
-            公司简介
-        </div>
-        <div class="panel-body">
-            <pre style="white-space: pre-wrap;word-wrap: break-word;border: 0px;line-height: 2;">{{$company->profile}}</pre>
-        </div>
-    </div>
-
-    <div class="panel panel-default">
-        <div class="panel-heading">
             主营品牌
         </div>
         <div class="panel-body">
@@ -80,6 +71,15 @@
 @stop
 
 @section('center_content')
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            公司简介
+        </div>
+        <div class="panel-body">
+            <pre style="white-space: pre-wrap;word-wrap: break-word;border: 0px;line-height: 2;">{{$company->profile}}</pre>
+        </div>
+    </div>
+
     <div class="panel panel-default">
         <div class="panel-heading">
             企业动态

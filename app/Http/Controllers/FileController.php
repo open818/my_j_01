@@ -40,7 +40,7 @@ class FileController extends Controller
         abort(404);
     }
 
-    private function showFile($file, $default = '')
+    public function showFile($file, $default = '')
     {
         $path = storage_path().'/files';
 
