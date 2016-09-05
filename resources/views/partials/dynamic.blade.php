@@ -2,7 +2,7 @@
     <li class="list-group-item">
         <div>
             <div class="col-md-9">
-                <h5>{{$dynamic->company->name}}</h5>
+                <a target="_blank" href="/company/show/{{$dynamic->company->id}}"><h5>{{$dynamic->company->name}}</h5></a>
             </div>
             <div class="col-md-3">
                 <button type="button" class="btn btn-primary pull-right">
@@ -14,15 +14,18 @@
         <div>
             公司地址：{{$dynamic->company->business_address}}{{$dynamic->company->address_details}}
         </div>
+        @if(!empty($dynamic->company->business_brands))
         <div>
-            主营品牌：<?php echo implode("、", $dynamic->company->business_brands); ?>
+            主营品牌：@php($i=1) @foreach($dynamic->company->business_brands as $brand) {{$brand->name}} @if($i != count($dynamic->company->business_brands)) 、@php($i++) @endif @endforeach
         </div>
+        @endif
+        @if(!empty($dynamic->company->business_categories))
         <div>
-            经营类目：<?php echo implode("、", $dynamic->company->business_categories); ?>
+            经营类目：@php($i=1) @foreach($dynamic->company->business_categories as $cate) {{$cate->name}} @if($i != count($dynamic->company->business_categories)) 、@php($i++) @endif @endforeach
         </div>
-
+        @endif
         <div>
-            <p>{{$dynamic->content}}</p>
+            <p>最新动态：{{$dynamic->content}}</p>
             @if(count($dynamic->attachments) > 0)
                 <div class="mail-attachment">
                     <p>
@@ -56,7 +59,7 @@
                         <div class="clearfix"></div>
                     </div>
 
-                    <small class="block text-muted"><i class="fa fa-clock-o"></i>{{$dynamic->created_at}}</small>
+                    <small class="block text-muted"><i class="fa fa-clock-o"></i>发布于 {{$dynamic->created_at}}</small>
                 </div>
             @endif
         </div>

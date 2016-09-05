@@ -38,7 +38,9 @@
             主营品牌
         </div>
         <div class="panel-body">
+            @if($company->business_brands)
             @php($i=1) @foreach($company->business_brands as $brand) {{$brand->name}} @if($i != count($company->business_brands)) 、@php($i++) @endif @endforeach
+            @endif
         </div>
     </div>
 
@@ -47,7 +49,9 @@
             主营类目
         </div>
         <div class="panel-body">
+            @if($company->business_categories)
             @php($i=1) @foreach($company->business_categories as $cate) {{$cate->name}} @if($i != count($company->business_categories)) 、@php($i++) @endif @endforeach
+            @endif
         </div>
     </div>
 

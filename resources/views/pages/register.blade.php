@@ -20,12 +20,12 @@
         }
 
         .container {
-            display: table-cell;
-            vertical-align: middle;
+            width: 500px;
+            height: 100%;
         }
 
         .content {
-            width: 500px;
+            margin-top: 300px;
         }
 
         .title {
