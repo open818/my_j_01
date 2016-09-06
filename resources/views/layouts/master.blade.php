@@ -94,7 +94,19 @@
 {!! Html::script('/bower/jquery/dist/jquery.min.js') !!}
 {!! Html::script('/bower/bootstrap/dist/js/bootstrap.min.js') !!}
 {!! Html::script('/js/app.js') !!}
+<script>
+	$('#search_btn').click(function(){
+		var key = $('#search_key').val();
+		key = $.trim(key);
+		if(key.length == 0){
+			return '';
+		}
+
+		location.href = "search/"+key;
+	});
+</script>
 @section('scripts')
+
 @show
 
 </body>

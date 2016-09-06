@@ -7,15 +7,12 @@
 
             <div class="col-md-9">
                 <div class="col-md-9">
-                    {!! Form::open() !!}
                     <div class="input-group">
-                        <input type="text" placeholder="输入商户名、品牌、产品、联系人或其他关键词" class="form-control">
+                        <input id="search_key" type="text" placeholder="输入商户名、品牌、联系人或其他关键词" class="form-control" @if(isset($search_key)) value="{{$search_key}}" @endif>
                         <span class="input-group-btn">
-                            <button type="button" class="btn btn-primary">搜索</button>
+                            <button type="button" id="search_btn" class="btn btn-primary">搜索</button>
                         </span>
                     </div>
-
-                    {!! Form::close() !!}
                 </div>
 
                 <div class="col-md-3 navbar-right">
