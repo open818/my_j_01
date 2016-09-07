@@ -2,7 +2,7 @@
     <nav class="navbar navbar-inverse navbar-static-top">
         <div>
             <div class="col-md-3">
-                <a href="/" hidefocus="true" ><img src="img/logo.gif" alt="京东"></a>
+                <a href="/" hidefocus="true" ><img style="height: 80px;" src="img/logo.png" alt="商有道"></a>
             </div>
 
             <div class="col-md-9">
@@ -16,9 +16,9 @@
                 </div>
 
                 <div class="col-md-3 navbar-right">
-                    <button type="submit" class="btn btn-primary">
+                    <a href="/company/dynamic/add" class="btn btn-primary">
                         <i class="fa fa-btn fa-sign-in"></i> 发布商机
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>

@@ -65,10 +65,49 @@
                     <tr>
                         <td>{{$employee->user->name}}</td>
                         <td>{{$employee->position}}</td>
-                        <td><i class="fa fa-phone"></i>{{$employee->user->mobile}}</td>
+                        <td>
+                            <a href="javascript:void(0);">
+                                <i class="fa fa-phone" data-toggle="tooltip" title="{{$employee->user->mobile}}"></i>
+                            </a>
+                            <a href="javascript:void(0);" data-id="{{$employee->user->id}}" data-user="{{$employee->user->name}}({{$employee->user->mobile}})"  class="user_comments">
+                                <i class="fa fa-comments" data-toggle="tooltip" title="点击留言"></i>
+                            </a>
+                        </td>
                     </tr>
                 @endforeach
             </table>
+
+            <!-- 模态框（Modal） -->
+            <div class="modal fade" id="message_modal" tabindex="-1" role="dialog"
+                 aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close"
+                                    data-dismiss="modal" aria-hidden="true">
+                                &times;
+                            </button>
+                            <h4 class="modal-title" id="myModalLabel">
+                                信息留言 - <label id="m_message_user"></label>
+                            </h4>
+                        </div>
+                        <div class="modal-body">
+                            {!! Form::open(['id'=>'modal_form', 'url'=>'/user/message/add', 'method'=>'post']) !!}
+                            <input type="hidden" id="m_user_id" name="to">
+                            <textarea rows="3" id="m_content" name="content" style="width: 100%;"></textarea>
+                            {!! Form::close() !!}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default"
+                                    data-dismiss="modal">关闭
+                            </button>
+                            <button type="button" id="m_sumit" class="btn btn-primary">
+                                提交
+                            </button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal -->
+            </div>
         </div>
     </div>
 
@@ -120,9 +159,31 @@
                 } ,
                 dataType: 'json'
             });
-
         }
     }
+
+    $(".user_comments").click(function(){
+        @if(Auth::user())
+            var id = $(this).attr('data-id');
+            if(id == '{{Auth::user()->id }}'){
+                alert('不能给自己留言！');
+                return ;
+            }
+            $('#m_content').val('');
+            $('#m_message_user').html($(this).attr('data-user'));
+            $('#m_user_id').val(id);
+            $('#message_modal').modal('show');
+        @else
+            alert('请先登录，或您可直接电话联系-'+$(this).attr('data-user'));
+        @endif
+    });
+
+    $("#m_sumit").click(function(){
+        var content = $('#m_content').val();
+        if($.trim(content) != ''){
+            $( "#modal_form" ).submit();
+        }
+    });
 
     $(document).ready(function(){
         loadDynamicData();

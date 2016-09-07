@@ -53,6 +53,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/user/relevancy', "UserController@relevancy_company");
     Route::post('/user/relevancy', "UserController@saveRelevancy");
     Route::post('/user/saveProfile', "UserController@saveProfile");
+    Route::post('/user/message/add', "UserController@addUserMessage");
+    Route::get('/user/message/show', "UserController@showUserMessage");
+    Route::get('/user/message/show_item/{lastId}', "UserController@ajax_getUserMessage");
 
     Route::get('/company/edit', "CompanyController@edit");
     Route::post('/company/edit', "CompanyController@update");

@@ -21,7 +21,9 @@ class Authenticate
             if ($request->ajax() || $request->wantsJson()) {
                 return response('Unauthorized.', 401);
             } else {
-                return redirect()->guest('/');
+                return redirect()->back()->with([
+                    'alert_message' => "请先登录！",
+                ]);;
             }
         }
 

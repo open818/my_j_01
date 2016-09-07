@@ -104,9 +104,11 @@
 
 		location.href = "search/"+key;
 	});
+	@if(Session::has('alert_message'))
+		alert('{{Session::get('alert_message')}}');
+	@endif
 </script>
 @section('scripts')
-
 @show
 
 </body>

@@ -6,6 +6,7 @@ use App\Helpers\File;
 use App\Models\Company;
 use App\Models\CompanyUser;
 use App\Models\User;
+use App\Models\UserMessage;
 use Illuminate\Http\Request;
 use \Auth;
 use \Validator;
@@ -195,5 +196,44 @@ class UserController extends Controller
         }
         $user->delete();
         return redirect()->back();
+    }
+
+    //添加用户留言
+    public function addUserMessage (Request $request){
+        if(!empty($request->input('content'))){
+            $message = new UserMessage();
+            $message->from_id = Auth::user()->id;
+            $message->to_id = $request->input('to');
+            $message->content = $request->input('content');
+
+            $message->save();
+        }
+        return redirect()->back();
+    }
+
+    //添加用户留言
+    public function showUserMessage (Request $request){
+        return view('pages.user_message');
+    }
+
+    //
+    public function ajax_getUserMessage ($lastid = 0){
+        $page_size = 2;
+
+        $query = UserMessage::with('from_user')->where('to_id', Auth::user()->id);
+        if($lastid > 0){
+            $query->where('id', '<', $lastid);
+        }
+        $rs = $query->orderby('id', 'desc')->take($page_size)->get();
+        if(count($rs) == 0){
+            return response()->json(['count'=>0]);
+        }
+
+        $view = view('partials.usermessage_item', ['data'=>$rs]);
+        foreach ($rs as $message){
+            $message->isread = 'Y';
+            $message->save();
+        }
+        return response()->json(['count'=>count($rs), 'html'=> (string)$view, 'lastid'=>(string)($rs[count($rs)-1]->id)]);
     }
 }
