@@ -134,6 +134,8 @@
                 </ul>
             </div>
         </div>
+        <div id="item_end" class="panel-footer" style="text-align:center;display: none;">
+        </div>
     </div>
 @stop
 
@@ -152,10 +154,19 @@
                 type: 'GET',
                 url: url ,
                 success: function(data) {
-                    var _ul = $('.company_dynamic > ul');
-                    $(data.html).appendTo(_ul);
-                    lastTime = data.lastTime;
-                    loading = false;
+                    if(data.count > 0){
+                        var _ul = $('.company_dynamic > ul');
+                        $(data.html).appendTo(_ul);
+                        lastTime = data.lastTime;
+                        loading = false;
+                    }else{
+                        if(lastTime == ''){
+                            $("#item_end").html('查询暂无数据').show();
+                        }else{
+                            $("#item_end").html('已是最后一条数据').show();
+                        }
+
+                    }
                 } ,
                 dataType: 'json'
             });

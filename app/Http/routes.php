@@ -34,11 +34,23 @@ Route::get('/', function () {
         ['img'=>'/img/banner/03.png','alt'=>'a','url'=>'http://www.baidu.com'],
         ['img'=>'/img/banner/04.png','alt'=>'a','url'=>'http://www.baidu.com'],
     ];
-    return view('pages.index',compact('panel', 'banners', 'main_config'));
+
+
+    if(Auth::user()){
+        $companies = Auth::user()->able_companies();
+        if(count($companies) > 0){
+            $p_ids = \App\Models\Category::whereRaw('id in ('.$companies[0]->company->business_categories.')')->lists('p_id');
+            $categories = \App\Models\Category::whereIn('id', $p_ids)->get();
+        }
+    }
+    if(!isset($categories) || count($categories) == 0){
+        $categories = \App\Helpers\CategoryHelper::getCategory(0);
+    }
+    return view('pages.index',compact('panel', 'banners', 'main_config','categories'));
 });
 
 Route::get('/search/{search_key}', 'SearchController@search');
-Route::get('/search_item/{search_key}/{lastid?}', 'SearchController@ajax_search');
+Route::get('/search_item/{search_key}/{page?}', 'SearchController@ajax_search');
 Route::get('/company/show/{id}/{tab?}', 'CompanyController@show');
 Route::get('/circle/dist/{province?}/{city?}/{district?}', 'BusinessCircleController@ajax_getBydist');
 Route::get('/company_dynamic/{company_id}/{lastTime?}', 'CompanyDynamicController@ajax_getByCompany');

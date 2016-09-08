@@ -7285,7 +7285,7 @@ section.wrapper-page {
 
 .category ul,.category li{ list-style:none;}
 .category .box{ width:100%; margin:0 auto; position:relative; overflow:hidden; _height:100%;}
-.category .picbox{ width:100%; height:40px; overflow:hidden; position:relative;}
+.category .picbox{ width:100%; overflow:hidden; position:relative;}
 .category .piclist{ position:absolute; left:0px; top:0px}
 .category .piclist li{ margin-right:20px; padding:5px; float:left;}
 .category .swaplist{ position:absolute; left:-3000px; top:0px}
@@ -7345,4 +7345,34 @@ ul.tab-list li {  list-style: none;  }
   padding: 10px;
   background-color: #f8f8f8;
   border-top: 1px solid #e7eaec;
+}
+
+.search_condition a{
+   font-size: 10px;
+   background-color: #f3f3f4;
+   padding: 5px 12px;
+   color: inherit;
+   border-radius: 2px;
+   border: 1px solid #e7eaec;
+   margin-right: 5px;
+   margin-top: 5px;
+   cursor:pointer;
+   line-height: 30px;
+ }
+
+.search_condition button{
+  font-size: 10px;
+  background-color: #f3f3f4;
+  padding: 5px 12px;
+  color: inherit;
+  border-radius: 2px;
+  border: 1px solid #e7eaec;
+  margin-right: 5px;
+  margin-top: 5px;
+  cursor:pointer;
+  line-height: 30px;
+}
+
+.search_condition button.active{
+  background-color: #00a1cb;
 }

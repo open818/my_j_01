@@ -44,34 +44,23 @@
                 </div> {{-- end carousel --}}
 
                 <div class="panel panel-default">
-                    <div class="panel-body category">
-                        <div class="box">
-                            <div class="picbox">
-                                <ul class="piclist mainlist">
-                                    <li>所有</li>
-                                    @foreach(\App\Helpers\CategoryHelper::getCategory() as $category)
-                                        <li>{{$category->name}}</li>
-                                    @endforeach
-                                </ul>
-                                <ul class="piclist swaplist"></ul>
-                            </div>
-                            <div class="og_prev"></div>
-                            <div class="og_next"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="panel panel-default">
                     <div class="panel-heading">
                         企业动态
                     </div>
                     <div class="panel-body">
+                        <div class="search_condition" style="margin-bottom: 20px;">
+                            <button class="active condition">所有</button>
+                            @foreach($categories as $category)
+                                <button class="condition" data-id="{{$category->id}}">{{$category->name}}</button>
+                            @endforeach
+                        </div>
                         <div class="company_dynamic">
                             <input type="hidden" id="lastTime" />
                             <ul class="list-group">
                             </ul>
                         </div>
                     </div>
+                    <div id="item_end" class="panel-footer" style="text-align:center;display: none;"></div>
                 </div>
             @stop {{-- end center_content --}}
 
@@ -105,6 +94,7 @@
     @parent
     <script>
         var lastTime = '';
+        var id1 = 0;
         var loading = false;
 
         function loadDynamicData(){
@@ -116,16 +106,38 @@
                     type: 'GET',
                     url: url ,
                     success: function(data) {
-                        var _ul = $('.company_dynamic > ul');
-                        $(data.html).appendTo(_ul);
-                        lastTime = data.lastTime;
+                        if(data.count > 0){
+                            var _ul = $('.company_dynamic > ul');
+                            $(data.html).appendTo(_ul);
+                            lastTime = data.lastTime;
+                        }else{
+                            if(lastTime == ''){
+                                $("#item_end").html('查询暂无数据').show();
+                            }else{
+                                $("#item_end").html('已是最后一条数据').show();
+                            }
+                        }
                         loading = false;
                     } ,
                     dataType: 'json'
                 });
-
             }
         }
+
+        $(".condition").click(function(){
+            if($(this).hasClass('active')){
+                return '';
+            }
+
+            var v = $(this).attr('data-id');
+            lastTime='';
+            id1 = 0;
+            $('.company_dynamic > ul').html('');
+            $("#item_end").hide();
+            loadDynamicData();
+            $(this).parent().children('button').removeClass('active');
+            $(this).addClass('active');
+        });
 
         $(document).ready(function(){
             loadDynamicData();

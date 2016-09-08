@@ -43,7 +43,6 @@ class CompanyController extends Controller
                 $strarr = explode(" ", $company['business_address']);
                 $company['province'] = $strarr[0];
                 $company['city'] = $strarr[1];
-                $company['district'] = $strarr[2];
                 if(!empty($company['url'])){
                     $company['url'] = substr($company['url'], 7);
                 }
@@ -95,7 +94,7 @@ class CompanyController extends Controller
         $company = Company::findOrFail($companies[0]->company_id);
         
         //user update
-        $company->business_address = $request->input('province').' '.$request->input('city').' '.$request->input('district');
+        $company->business_address = $request->input('province').' '.$request->input('city');
         $company->address_details = $request->input('address_details');
         $company->business_circle_id = $request->input('business_circle_id');
         $company->tel = $request->input('tel');
@@ -211,6 +210,10 @@ class CompanyController extends Controller
         }
         $rs = CompanyDynamic::with('company')->where('created_at', '<', $lastTime)->orderby('created_at', 'desc')->take($this->page_size)->get();
 
+        if(count($rs) == 0){
+            return response()->json(['count'=>0]);
+        }
+
         foreach($rs as &$dynamic){
             if(!empty($dynamic->attachments)){
                 $attachments = UpdateFile::whereRaw('id in ('. $dynamic->attachments.')')->get();
@@ -227,6 +230,6 @@ class CompanyController extends Controller
         }
 
         $view = view('partials.dynamic', ['data'=>$rs]);
-        return response()->json(['html'=> (string)$view, 'lastTime'=>(string)($rs[count($rs)-1]->created_at)]);
+        return response()->json(['count'=>count($rs), 'html'=> (string)$view, 'lastTime'=>(string)($rs[count($rs)-1]->created_at)]);
     }
 }

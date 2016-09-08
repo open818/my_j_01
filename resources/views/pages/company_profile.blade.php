@@ -28,7 +28,6 @@
                     <div id="company_distpicker" data-toggle="distpicker">
                         <select id="province" name="province" class="form-control distpicker_change" data-province="{{old('province')}}"></select>
                         <select id="city" name="city" class="form-control distpicker_change" data-city="{{old('city')}}"></select>
-                        <select name="district" class="form-control" data-district="{{old('district')}}"></select>
                     </div>
                 </div>
             </div>

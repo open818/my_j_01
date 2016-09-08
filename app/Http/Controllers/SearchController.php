@@ -23,25 +23,11 @@ class SearchController extends Controller
 
     }
 
-    public function search($search_key){
-        $panel = [
-            'center' => [
-                'width' => 8,
-            ],
-            'right' => [
-                'width' => 3,
-                'class' => 'home-no-padding',
-            ],
-        ];
-        return view('pages.search', compact('search_key','panel'));
-    }
-
-    public function ajax_search($search_key, $lastid = 0)
-    {
+    private function getSearchQuery($search_key){
         $search_key = '%'.$search_key.'%';
 
         //供应商表
-        $companies = Company::where('status', 1)->where('id','>', $lastid)->Where(function($query) use($search_key){
+        return Company::where('status', 1)->Where(function($query) use($search_key){
             //1、品牌检索
             $match_brands = Brand::Where('name','like',$search_key)->get();
 
@@ -79,7 +65,79 @@ class SearchController extends Controller
                     $query->orWhere('id', $companyuser->company_id);
                 }
             }
-        })->orderBy('id')->take($this->page_size)->get();
+        });
+    }
+
+    public function search($search_key){
+        $panel = [
+            'center' => [
+                'width' => 8,
+            ],
+            'right' => [
+                'width' => 3,
+                'class' => 'home-no-padding',
+            ],
+        ];
+
+        $rs = $this->getSearchQuery($search_key)->get(['business_address','business_brands','business_categories']);
+        $brands_ids = array();
+        $category_ids = array();
+        $province_s = array();
+        foreach ($rs as $company){
+            if(!empty($company->business_address)){
+                $province = explode(" ",$company->business_address)[0];
+                if(!array_key_exists($province, $province_s)){
+                    $province_s[$province] = $province;
+                }
+            }
+
+            if(!empty($company->business_brands)){
+                $temp = array_merge($brands_ids, explode(",", $company->business_brands));
+                $temp = array_flip($temp);
+                $brands_ids = array_keys($temp);
+            }
+
+            if(!empty($company->business_categories)){
+                $temp = array_merge($category_ids, explode(",", $company->business_categories));
+                $temp = array_flip($temp);
+                $category_ids = array_keys($temp);
+            }
+        }
+
+        $brands = array();
+        if(!empty($brands_ids)){
+            $brands = Brand::whereIn('id',$brands_ids)->get(['id','name']);
+        }
+
+        $categories = array();
+        if(!empty($category_ids)){
+            $p_ids = Category::whereIn('id',$category_ids)->lists('p_id');
+            $categories = Category::whereIn('id',$p_ids)->get(['id','name']);
+        }
+
+        return view('pages.search', compact('search_key','panel','brands','categories','province_s'));
+    }
+
+    public function ajax_search($search_key, $page = 1)
+    {
+        $category_id = request()->input('id1', 0);
+        $brand_id = request()->input('id2', 0);
+        $area = request()->input('area', '');
+        //供应商表
+        $query = $this->getSearchQuery($search_key);
+        if($brand_id > 0){
+            $query->whereRaw("CONCAT(',',business_brands,',') like CONCAT('%',".$brand_id.",'%')");
+        }
+
+        if($category_id > 0){
+            $query->whereRaw("CONCAT(',',business_categories,',') like CONCAT('%',".$category_id.",'%')");
+        }
+
+        if(!empty($area)){
+            $query->where("business_address","like", $area.'%');
+        }
+
+        $companies = $query->orderBy('sort_score', 'desc')->take($this->page_size)->skip($this->page_size*$page)->get();
 
         if(count($companies) == 0){
             return response()->json(['count'=>0]);
@@ -107,6 +165,6 @@ class SearchController extends Controller
         }
 
         $view = view('partials.search_item', ['data'=>$companies]);
-        return response()->json(['count'=>count($companies), 'html'=> (string)$view, 'lastid'=>(string)($companies[count($companies)-1]->id)]);
+        return response()->json(['count'=>count($companies), 'html'=> (string)$view, 'lastid'=>$page+1]);
     }
 }

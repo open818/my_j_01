@@ -10,28 +10,32 @@
 
             @section('center_content')
                 <div class="panel panel-default">
-                    <div class="panel-body category">
-                        <div class="box">
-                            <div class="picbox">
-                                <ul class="piclist mainlist">
-                                    <li>所有</li>
-                                    @foreach(\App\Helpers\CategoryHelper::getCategory() as $category)
-                                        <li>{{$category->name}}</li>
-                                    @endforeach
-                                </ul>
-                                <ul class="piclist swaplist"></ul>
-                            </div>
-                            <div class="og_prev"></div>
-                            <div class="og_next"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="panel panel-default">
                     <div class="panel-heading">
                         搜索结果
                     </div>
                     <div class="panel-body">
+                        <div>
+                            <div class="search_condition" data-index="3">
+                                地区：<a class="active condition">所有</a>
+                                @foreach($province_s as $key => $v)
+                                    <a class="condition" data-id="{{$key}}">{{$v}}</a>
+                                @endforeach
+                            </div>
+                            <div class="search_condition" data-index="1">
+                                类目：<a class="active condition">所有</a>
+                                @foreach($categories as $category)
+                                    <a class="condition" data-id="{{$category->id}}">{{$category->name}}</a>
+                                @endforeach
+                            </div>
+                            <div class="search_condition" data-index="2">
+                                品牌：<a class="active condition">所有</a>
+                                    @foreach($brands as $brand)
+                                        <a class="condition" data-id="{{$brand->id}}">{{$brand->name}}</a>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+
                         <div class="search_company">
                             <ul class="list-group">
                             </ul>
@@ -72,6 +76,9 @@
     @parent
     <script>
         var lastid = 0;
+        var id1 = 0;
+        var id2 = 0;
+        var id3 = '';
         var loading = false;
 
         function loadDynamicData(){
@@ -82,6 +89,7 @@
                 $.ajax({
                     type: 'GET',
                     url: url ,
+                    data: {id1:id1,id2:id2,area:id3},
                     success: function(data) {
                         if(data.count > 0){
                             var _ul = $('.search_company > ul');
@@ -95,14 +103,28 @@
                             }
 
                         }
-
                         loading = false;
                     } ,
                     dataType: 'json'
                 });
-
             }
         }
+
+        $(".condition").click(function(){
+            if($(this).hasClass('active')){
+                return '';
+            }
+
+            var index = $(this).parent().attr('data-index');
+            var v = $(this).attr('data-id');
+            lastid=0;
+            eval( "id"+ index +" ='"+v+"';");
+            $('.search_company > ul').html('');
+            $("#item_end").hide();
+            loadDynamicData();
+            $(this).parent().children('a').removeClass('active');
+            $(this).addClass('active');
+        });
 
         $(document).ready(function(){
             loadDynamicData();
