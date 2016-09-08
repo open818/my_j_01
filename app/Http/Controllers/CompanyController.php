@@ -104,6 +104,11 @@ class CompanyController extends Controller
         $company->profile = $request->input('profile');
         $company->business_brands = empty($request->input('business_brand'))?null:implode(',',$request->input('business_brand'));
         $company->business_categories = $request->input('business_categories');
+        if(!empty($company->business_categories)){
+            $p = Category::whereRaw('id in ('.$company->business_categories.')')->distinct()->lists('p_id')->toArray();
+            $company->business_categories_p = implode(',', $p);
+        }
+
         $company->save();
 
         return redirect()->back();
@@ -208,7 +213,15 @@ class CompanyController extends Controller
         if(empty($lastTime)){
             $lastTime = Carbon::now();
         }
-        $rs = CompanyDynamic::with('company')->where('created_at', '<', $lastTime)->orderby('created_at', 'desc')->take($this->page_size)->get();
+
+        $rs = CompanyDynamic::with('company')->where(function($query){
+            $cate_id = request()->input('id1', 0);
+            if($cate_id>0){
+                $query->whereHas('company', function($query) use($cate_id){
+                    $query->whereRaw("CONCAT(',',business_categories_p,',') like CONCAT('%',".$cate_id.",'%')");
+                });
+            }
+        })->where('created_at', '<', $lastTime)->orderby('created_at', 'desc')->take($this->page_size)->get();
 
         if(count($rs) == 0){
             return response()->json(['count'=>0]);

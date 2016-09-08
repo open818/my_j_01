@@ -79,7 +79,7 @@ class SearchController extends Controller
             ],
         ];
 
-        $rs = $this->getSearchQuery($search_key)->get(['business_address','business_brands','business_categories']);
+        $rs = $this->getSearchQuery($search_key)->get(['business_address','business_brands','business_categories_p']);
         $brands_ids = array();
         $category_ids = array();
         $province_s = array();
@@ -97,8 +97,8 @@ class SearchController extends Controller
                 $brands_ids = array_keys($temp);
             }
 
-            if(!empty($company->business_categories)){
-                $temp = array_merge($category_ids, explode(",", $company->business_categories));
+            if(!empty($company->business_categories_p)){
+                $temp = array_merge($category_ids, explode(",", $company->business_categories_p));
                 $temp = array_flip($temp);
                 $category_ids = array_keys($temp);
             }
@@ -111,8 +111,7 @@ class SearchController extends Controller
 
         $categories = array();
         if(!empty($category_ids)){
-            $p_ids = Category::whereIn('id',$category_ids)->lists('p_id');
-            $categories = Category::whereIn('id',$p_ids)->get(['id','name']);
+            $categories = Category::whereIn('id',$category_ids)->get(['id','name']);
         }
 
         return view('pages.search', compact('search_key','panel','brands','categories','province_s'));

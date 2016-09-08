@@ -86,6 +86,7 @@ class CreateUsersTable extends Migration
             $table->string('url', 50)->nullable()->common('网址');
             $table->string('business_brands')->nullable()->common('经营品牌');
             $table->string('business_categories')->nullable()->common('经营类目');
+            $table->string('business_categories_p')->nullable()->common('经营类目大类');
             $table->string('gsxt_url', 200)->nullable()->common('工商网站URL');
             $table->integer('sort_score')->default(0)->common('排序得分');
             $table->char('status', 1)->default(1)->common('状态，0：作废 1：有效 2：申请中');

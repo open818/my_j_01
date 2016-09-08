@@ -14,26 +14,31 @@
                         搜索结果
                     </div>
                     <div class="panel-body">
-                        <div>
+                        <div style="margin-bottom: 10px;">
+                            @if(!empty($province_s))
                             <div class="search_condition" data-index="3">
                                 地区：<a class="active condition">所有</a>
                                 @foreach($province_s as $key => $v)
                                     <a class="condition" data-id="{{$key}}">{{$v}}</a>
                                 @endforeach
                             </div>
+                            @endif
+                            @if(count($categories)>0)
                             <div class="search_condition" data-index="1">
                                 类目：<a class="active condition">所有</a>
                                 @foreach($categories as $category)
                                     <a class="condition" data-id="{{$category->id}}">{{$category->name}}</a>
                                 @endforeach
                             </div>
+                            @endif
+                            @if(count($categories)>0)
                             <div class="search_condition" data-index="2">
                                 品牌：<a class="active condition">所有</a>
                                     @foreach($brands as $brand)
                                         <a class="condition" data-id="{{$brand->id}}">{{$brand->name}}</a>
                                     @endforeach
-                                </ul>
                             </div>
+                            @endif
                         </div>
 
                         <div class="search_company">

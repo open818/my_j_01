@@ -105,6 +105,7 @@
                 $.ajax({
                     type: 'GET',
                     url: url ,
+                    data: {id1:id1},
                     success: function(data) {
                         if(data.count > 0){
                             var _ul = $('.company_dynamic > ul');
@@ -129,9 +130,8 @@
                 return '';
             }
 
-            var v = $(this).attr('data-id');
+            id1 = $(this).attr('data-id');
             lastTime='';
-            id1 = 0;
             $('.company_dynamic > ul').html('');
             $("#item_end").hide();
             loadDynamicData();
