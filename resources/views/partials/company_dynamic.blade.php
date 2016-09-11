@@ -2,7 +2,7 @@
     <li class="list-group-item">
         <small class="block text-muted"><i class="fa fa-clock-o"></i>{{$dynamic->created_at}} {{$dynamic->user_name}}</small>
         <p>{{$dynamic->content}}</p>
-        @if(count($dynamic->attachments) > 0)
+        @if(!empty($dynamic->attachments) && count($dynamic->attachments) > 0)
             <div class="mail-attachment">
                 <p>
                     <span><i class="fa fa-paperclip"></i> {{count($dynamic->attachments)}} 个附件</span>

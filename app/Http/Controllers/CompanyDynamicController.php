@@ -37,7 +37,7 @@ class CompanyDynamicController extends Controller
                 $dynamic->attachments = $attachments;
             }
         }
-
+        //return view('partials.company_dynamic', ['data'=>$rs]);
         $view = view('partials.company_dynamic', ['data'=>$rs]);
         return response()->json(['count'=>count($rs), 'html'=> (string)$view, 'lastTime'=>(string)($rs[count($rs)-1]->created_at)]);
     }

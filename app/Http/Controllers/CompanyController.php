@@ -241,7 +241,7 @@ class CompanyController extends Controller
                 $dynamic->company->business_categories = Category::whereRaw('id in ('.$dynamic->company->business_categories.')')->get();
             }
         }
-
+        //return view('partials.dynamic', ['data'=>$rs]);
         $view = view('partials.dynamic', ['data'=>$rs]);
         return response()->json(['count'=>count($rs), 'html'=> (string)$view, 'lastTime'=>(string)($rs[count($rs)-1]->created_at)]);
     }

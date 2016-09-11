@@ -39,7 +39,9 @@ Route::get('/', function () {
     if(Auth::user()){
         $companies = Auth::user()->able_companies();
         if(count($companies) > 0){
-            $categories = \App\Models\Category::whereRaw('id in ('.$companies[0]->company->business_categories_p.')')->get();
+            if(!empty($companies[0]->company->business_categories_p)){
+                $categories = \App\Models\Category::whereRaw('id in ('.$companies[0]->company->business_categories_p.')')->get();
+            }
         }
     }
     if(!isset($categories) || count($categories) == 0){
