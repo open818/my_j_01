@@ -2,9 +2,6 @@
 
 @section('css')
     @parent
-    {!! Html::style('/bower/bootstrap-select/dist/css/bootstrap-select.min.css') !!}
-    {!! Html::style('/bower/ztree/css/zTreeStyle/zTreeStyle.css') !!}
-    {!! Html::style('/bower/jquery-ui/themes/base/jquery-ui.min.css') !!}
     {!! Html::style('/bower/bootstrap-fileinput/css/fileinput.min.css') !!}
 @show
 
@@ -19,17 +16,15 @@
             <div class="form-group form-inline">
                 <div class="radio">
                     <label class="control-label">类型：</label>
-                    <label><input type="radio" checked value="1" name="type">我在销售</label>
-                    <label><input type="radio" checked value="2" name="type">我在求购</label>
+                    <select name="category_id" class="form-control">
+                        @foreach($categories as $category)
+                            <option value="{{$category->id}}">{{$category->name}}</option>
+                        @endforeach
+                    </select>
                 </div>
 
-                <div class="radio" style="margin-top: 0px">
-                    <label class="control-label">失效期：</label>
-                    <input type='text' placeholder="不填即长期有效" readonly name="exp_date" id="exp_date" class="form-control" />
-                </div>
-
-                <button type="button" id="btn_submit" class="btn btn-primary">
-                    <i class="fa fa-btn fa-sign-in"></i> 发布
+                <button class="btn btn-primary pull-right m-t-n-xs" id="btn_submit" type="button">
+                    <i class="fa fa-btn fa-sign-in"></i><strong>发布</strong>
                 </button>
             </div>
 
@@ -58,99 +53,19 @@
     {!! Html::script('/bower/bootstrap-fileinput/themes/fa/theme.js') !!}
     {!! Html::script('/bower/bootstrap-fileinput/js/locales/zh.js') !!}
     <script>
-        $('.selectpicker').selectpicker({noneSelectedText:'请选择'});
-
-        $('.selectcategory').click(function(){
-            showMenu(this);
-        });
-
-        $('#exp_date').datepicker({
-            dateFormat: 'yy-mm-dd',
-            showButtonPanel:true,
-            minDate: 0,
-            closeText: '清除',
-            onClose: function (dateText, inst) {
-                if ($(window.event.srcElement).hasClass('ui-datepicker-close'))
-                {
-                    document.getElementById(this.id).value = '';
-                }
-            }
-        });
-
-        var setting = {
-            check: {
-                enable: true,
-                chkboxType: {"Y":"", "N":""}
-            },
-            view: {
-                dblClickExpand: false
-            },
-            data: {
-                simpleData: {
-                    enable: true
-                }
-            },
-            callback: {
-                beforeClick: beforeClick,
-                onCheck: onCheck
-            }
-        };
-
-        var zNodes =[
-                @foreach(\App\Helpers\CategoryHelper::getAll() as $category)
-                {id:{{$category->id}}, pId:{{$category->p_id}}, name:"{{$category->name}}"
-                @if($category->p_id == 0) ,nocheck:true @elseif(strpos(','.old('business_categories').',' ,','.$category->id.',') !== false) ,checked:true @endif},
-                @endforeach
-        ];
-
-        function beforeClick(treeId, treeNode) {
-            var zTree = $.fn.zTree.getZTreeObj("treeDemo");
-            zTree.checkNode(treeNode, !treeNode.checked, null, true);
-            return false;
-        }
-
-        function onCheck(e, treeId, treeNode) {
-            var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
-                    nodes = zTree.getCheckedNodes(true),
-                    n = "", v = '';
-            for (var i=0, l=nodes.length; i<l; i++) {
-                n += nodes[i].name + ",";
-                v += nodes[i].id + ",";
-            }
-            if (n.length > 0 ) n = n.substring(0, n.length-1);
-            if (v.length > 0 ) v = v.substring(0, v.length-1);
-            var cityObj = $(".selectcategory");
-            cityObj.attr("value", n);
-            $('#business_categories').attr('value', v);
-        }
-
-        function showMenu(obj) {
-            var cityObj = $(obj);
-            $("#menuContent").css({left:obj.offsetLeft + "px", top:obj.offsetTop + cityObj.outerHeight() + "px"}).slideDown("fast");
-            $("#treeDemo").css({width: obj.offsetWidth});
-            $("body").bind("mousedown", onBodyDown);
-        }
-        function hideMenu() {
-            $("#menuContent").fadeOut("fast");
-            $("body").unbind("mousedown", onBodyDown);
-        }
-        function onBodyDown(event) {
-            if (!($(event.target).hasClass('selectcategory') || $(event.target).parents("#menuContent").length>0)) {
-                hideMenu();
-            }
-        }
-
         $("#input-id").fileinput({
             language: 'zh',
             uploadUrl: "/company/dynamic/upload",
             maxFileCount: 5,
-            showUpload: true, //是否显示上传按钮
+            showUpload: false, //是否显示上传按钮
             showCaption: false,//是否显示标题
             dropZoneEnabled: false,
             browseLabel: '附件 &hellip;',
             uploadExtraData:{'_token':'{{csrf_token()}}' },
             maxFileSize: 1024*2
             /*validateInitialCount: true,*/
+        }).on("filebatchselected", function(event, files) {
+            $(this).fileinput("upload");
         }).on("fileuploaded", function (event, data) {
             //异步上传后返回结果处理
             //后台一定要返回json对象,空的也行。否则会出现提示警告。

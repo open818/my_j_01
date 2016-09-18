@@ -118,6 +118,7 @@ class File
          */
         $uploaded = [];
         foreach ($files as $file) {
+
             $info = (object) pathinfo(strtolower($file->getClientOriginalName()));
             $options = (object) $this->options;
 
@@ -154,7 +155,7 @@ class File
                 $this->normalice("$path/$file_destiny");
 
                 $recode = new UpdateFile();
-                $recode->name = $info->basename;
+                $recode->name = $file->getClientOriginalName();
                 $recode->path = substr(explode(self::$default_path, str_replace('\\', '/', $return))[1], 1);
                 $recode->ext = $info->extension;
                 if(\Auth::user()){

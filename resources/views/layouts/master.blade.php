@@ -95,18 +95,28 @@
 {!! Html::script('/bower/bootstrap/dist/js/bootstrap.min.js') !!}
 {!! Html::script('/js/app.js') !!}
 <script>
-	$('#search_btn').click(function(){
-		var key = $('#search_key').val();
-		key = $.trim(key);
-		if(key.length == 0){
-			return '';
-		}
+	$(function(){
+		$('#search_btn').click(function(){
+			var key = $('#search_key').val();
+			key = $.trim(key);
+			if(key.length == 0){
+				return '';
+			}
 
-		location.href = "search/"+key;
-	});
-	@if(Session::has('alert_message'))
-		alert('{{Session::get('alert_message')}}');
-	@endif
+			location.href = "search/"+key;
+		});
+
+		@if(Session::has('alert_message'))
+			alert('{{Session::get('alert_message')}}');
+		@endif
+
+        @if(Session::has('redirect_url'))
+            location.href = '{{Session::get('redirect_url')}}';
+		@endif
+    });
+
+
+
 </script>
 @section('scripts')
 @show

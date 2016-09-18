@@ -21,13 +21,9 @@
                                 @else
 
                                 <div class="icon">
-                                    <i class="fa fa-file"></i>
-                                </div>
-                                @endif
-
-                                <div class="file-name">
                                     {{$att->name}}
                                 </div>
+                                @endif
                             </a>
                         </div>
                     </div>

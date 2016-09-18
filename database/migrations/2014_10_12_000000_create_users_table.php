@@ -65,8 +65,6 @@ class CreateUsersTable extends Migration
         Schema::create('category', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 50)->common('分类名称');
-            $table->integer('level')->common('层级');
-            $table->integer('p_id')->common('上级ID');
             $table->integer('seqno')->default(255)->common('排序号，最小排最前面');
             $table->char('status', 1)->default(1)->common('状态, 0: 作废 1: 有效');
             $table->timestamps();
@@ -80,13 +78,6 @@ class CreateUsersTable extends Migration
             $table->integer('business_circle_id')->nullable()->common('所属商圈');
             $table->string('business_address',200)->nullable()->common('经营地址');
             $table->string('address_details', 200)->nullable()->common('地址详情');
-            $table->string('tel', 20)->nullable()->common('电话');
-            $table->string('fax', 20)->nullable()->common('传真');
-            $table->string('email', 50)->nullable()->common('邮箱');
-            $table->string('url', 50)->nullable()->common('网址');
-            $table->string('business_brands')->nullable()->common('经营品牌');
-            $table->string('business_categories')->nullable()->common('经营类目');
-            $table->string('business_categories_p')->nullable()->common('经营类目大类');
             $table->string('gsxt_url', 200)->nullable()->common('工商网站URL');
             $table->integer('sort_score')->default(0)->common('排序得分');
             $table->char('status', 1)->default(1)->common('状态，0：作废 1：有效 2：申请中');
@@ -99,6 +90,7 @@ class CreateUsersTable extends Migration
             $table->integer('company_id')->common('公司ID');
             $table->integer('user_id')->common('用户ID');
             $table->string('position', 30)->common('职位');
+            $table->string('territory', 30)->common('负责区域');
             $table->char('isadmin', 1)->common('是否管理员，Y/N');
             $table->char('status', 1)->common('状态，0：作废 1：有效 2：申请中');
             $table->timestamps();
@@ -108,12 +100,9 @@ class CreateUsersTable extends Migration
         Schema::create('company_dynamic', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('company_id')->common('公司ID');
-            $table->integer('type')->common('动态类型 1：销售 2：求购 ');
-            $table->integer('brand_id')->nullable()->common('所属品牌');
             $table->integer('category_id')->nullable()->common('所属类目');
             $table->text('content')->common('内容');
             $table->text('attachments')->nullable()->common('附件');
-            $table->date('exp_date')->nullable()->common('失效日期');
             $table->integer('user_id')->common('创建人/联系人');
             $table->string('user_name',20)->common('创建人/联系人');
             $table->timestamps();

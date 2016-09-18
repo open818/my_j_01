@@ -35,18 +35,8 @@ Route::get('/', function () {
         ['img'=>'/img/banner/04.png','alt'=>'a','url'=>'http://www.baidu.com'],
     ];
 
+    $categories = \App\Models\Category::where('status', 1)->get();;
 
-    if(Auth::user()){
-        $companies = Auth::user()->able_companies();
-        if(count($companies) > 0){
-            if(!empty($companies[0]->company->business_categories_p)){
-                $categories = \App\Models\Category::whereRaw('id in ('.$companies[0]->company->business_categories_p.')')->get();
-            }
-        }
-    }
-    if(!isset($categories) || count($categories) == 0){
-        $categories = \App\Helpers\CategoryHelper::getCategory(0);
-    }
     return view('pages.index',compact('panel', 'banners', 'main_config','categories'));
 });
 
@@ -55,7 +45,7 @@ Route::get('/search_item/{search_key}/{page?}', 'SearchController@ajax_search');
 Route::get('/company/show/{id}/{tab?}', 'CompanyController@show');
 Route::get('/circle/dist/{province?}/{city?}/{district?}', 'BusinessCircleController@ajax_getBydist');
 Route::get('/company_dynamic/{company_id}/{lastTime?}', 'CompanyDynamicController@ajax_getByCompany');
-Route::get('/index/dynamic/{lastTime?}', 'CompanyController@ajax_getIndexCompany');
+Route::get('/index/dynamic/{lastTime?}', 'CompanyDynamicController@ajax_getIndexCompany');
 Route::get('img/{file?}', 'FileController@showImg')->where('file', '(.*)');
 Route::get('file/{file?}', 'FileController@showFile')->where('file', '(.*)');
 
@@ -73,9 +63,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/company/edit', "CompanyController@edit");
     Route::post('/company/edit', "CompanyController@update");
 
-    Route::get('/company/dynamic/add', "CompanyController@dynamic_add");
-    Route::post('/company/dynamic/add', "CompanyController@dynamic_create");
-    Route::post('/company/dynamic/upload', "CompanyController@uploadAttachment");
+    Route::get('/company/dynamic/add', "CompanyDynamicController@dynamic_add");
+    Route::post('/company/dynamic/add', "CompanyDynamicController@dynamic_create");
+    Route::post('/company/dynamic/upload', "CompanyDynamicController@uploadAttachment");
 
     Route::get('/company/relevancy/user', "UserController@getRelevancyUser");
     Route::post('/company/relevancy/edit', "UserController@getRelevancyUser");

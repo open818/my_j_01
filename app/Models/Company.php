@@ -14,14 +14,6 @@ class Company extends BaseModel
         return $this->hasMany('App\Models\CompanyUser');
     }
 
-    /**
-     * 获取企业经营的动态
-     */
-    public function dynamics()
-    {
-        return $this->hasMany('App\Models\CompanyDynamic', 'company_id', 'id');
-    }
-
     public function circle(){
         return $this->belongsTo('App\Models\BusinessCircle','business_circle_id','id');
     }

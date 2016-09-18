@@ -27,6 +27,14 @@
             </div>
 
             <div class="form-group">
+                <label for="name" class="col-md-4 control-label">负责区域：</label>
+
+                <div class="col-md-6">
+                    <input type="text" class="form-control" name="territory">
+                </div>
+            </div>
+
+            <div class="form-group">
                 <div class="col-md-5 control-label">
                     <button type="submit" class="btn btn-primary">
                         <i class="fa fa-btn fa-sign-in"></i> 选择关联

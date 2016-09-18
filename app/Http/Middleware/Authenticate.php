@@ -23,7 +23,7 @@ class Authenticate
             } else {
                 return redirect()->back()->with([
                     'alert_message' => "请先登录！",
-                ]);;
+                ]);
             }
         }
 

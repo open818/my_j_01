@@ -55,16 +55,6 @@ class UserController extends Controller
     }
 
     public function relevancy_company(){
-        /*$panel = [
-            'left' => [
-                'width' => 3,
-                'class' => 'home-no-padding',
-            ],
-            'center' => [
-                'width' => 9,
-            ],
-        ];*/
-
         $companies = Auth::user()->companies();
         if(count($companies) > 0){
             if($companies[0]->status == 2){
@@ -91,11 +81,14 @@ class UserController extends Controller
         $v = Validator::make($request->all(), [
             'company_name' => 'required|max:200',
             'position'  => 'required|max:30',
+            'territory'  => 'required|max:30',
         ],[
             'company_name.required' => '所属公司必填',
             'company_name.max' => '所属公司名过长',
             'position.required' => '所在职位必填',
             'position.max' => '所在职位名过长',
+            'territory.required' => '负责区域必填',
+            'territory.max' => '负责区域名称过长',
         ]);
 
         if ($v->fails()) {
@@ -104,6 +97,7 @@ class UserController extends Controller
 
         $name = $request->input('company_name');
         $position = $request->input('position');
+        $territory = $request->input('territory');
 
         $company = Company::with(['employees'=>function($query){
             $query->where('isadmin','Y');
@@ -121,6 +115,7 @@ class UserController extends Controller
             $company_user->company_id = $company->id;
             $company_user->user_id = $user->id;
             $company_user->position = $position;
+            $company_user->territory = $territory;
             $company_user->isadmin = 'Y';
             $company_user->status = 1;
             $company_user->save();
@@ -132,6 +127,7 @@ class UserController extends Controller
             $company_user->company_id = $company->id;
             $company_user->user_id = $user->id;
             $company_user->position = $position;
+            $company_user->territory = $territory;
             $company_user->isadmin = 'N';
             $company_user->status = 2;
             $company_user->save();
