@@ -34,7 +34,7 @@ class CreateUsersTable extends Migration
         Schema::create('user', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 20)->common('真实名称');
-            $table->string('pic_url', 200)->default('')->common('头像');
+            $table->string('QQ', 11)->default('')->common('QQ号');
             $table->string('email', 30)->nullable()->common('邮箱');
             $table->string('mobile', 11)->unique()->common('手机');
             $table->string('phone', 20)->nullable()->common('电话');

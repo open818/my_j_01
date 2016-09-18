@@ -7376,3 +7376,13 @@ ul.tab-list li {  list-style: none;  }
 .search_condition button.active{
   background-color: #00a1cb;
 }
+
+.well {
+  border: 1px solid #e7eaec;
+  box-shadow: none;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  padding: 10px 20px;
+  font-size: 11px;
+  line-height: 16px;
+}

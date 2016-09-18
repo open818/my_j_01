@@ -5,7 +5,7 @@
 @show
 
 @section('navigation')
-    <div class="container">
+    <div class="container" style="margin-top: 5px;">
         <div class="row panel panel-default">
             <div class="panel-body">
                 <h1>{{$company->name}}</h1>
@@ -14,8 +14,6 @@
                     ({{$company->circle->name}})
                 @endif
                 <br/>
-                联系电话：{{$company->tel}} 传真：{{$company->fax}}<br/>
-                电子邮箱：{{$company->email}} 网址：<a target="_blank" href="{{$company->url}}">{{$company->url}}</a><br/>
             </div>
         </div>
     </div>
@@ -24,10 +22,9 @@
 @section('breadcrumbs')
     <div class="row">
         <ul class="tab-list" style="padding: 0">
-            <li><a href="project_detail.html"><i class="fa fa-tag"></i> 基本信息</a>
-            </li>
-            <li><a href="{{$company->gsxt_url}}"><i class="fa fa-tag"></i> 工商信息</a>
-            </li>
+            @if($company->gsxt_url)
+                <li><a href="{{$company->gsxt_url}}"><i class="fa fa-tag"></i> 更多工商信息</a></li>
+            @endif
         </ul>
     </div>
 @stop
@@ -35,36 +32,19 @@
 @section('panel_left_content')
     <div class="panel panel-default">
         <div class="panel-heading">
-            主营品牌
-        </div>
-        <div class="panel-body">
-            @if($company->business_brands)
-            @php($i=1) @foreach($company->business_brands as $brand) {{$brand->name}} @if($i != count($company->business_brands)) 、@php($i++) @endif @endforeach
-            @endif
-        </div>
-    </div>
-
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            主营类目
-        </div>
-        <div class="panel-body">
-            @if($company->business_categories)
-            @php($i=1) @foreach($company->business_categories as $cate) {{$cate->name}} @if($i != count($company->business_categories)) 、@php($i++) @endif @endforeach
-            @endif
-        </div>
-    </div>
-
-    <div class="panel panel-default">
-        <div class="panel-heading">
             联系人
         </div>
         <div class="panel-body">
             <table class="table table-hover">
                 @foreach($company->employees as $employee)
-                    <tr>
+                    <tr class="bind_hover_card" data-toggle="popover" data-placement="bottom" data-trigger="hover"
+                        data-id="{{$employee->user->id}}"
+                        data-name="{{$employee->user->name}}" data-position="{{$employee->position}}" data-territory="{{$employee->territory}}"
+                        data-qq="{{$employee->user->QQ}}" data-email="{{$employee->user->email}}" data-mobile="{{$employee->user->mobile}}" data-phone="{{$employee->user->phone}}"
+                    >
                         <td>{{$employee->user->name}}</td>
                         <td>{{$employee->position}}</td>
+                        <td>{{$employee->territory}}</td>
                         <td>
                             <a href="javascript:void(0);">
                                 <i class="fa fa-phone" data-toggle="tooltip" title="{{$employee->user->mobile}}"></i>
@@ -111,9 +91,6 @@
         </div>
     </div>
 
-@stop
-
-@section('center_content')
     <div class="panel panel-default">
         <div class="panel-heading">
             公司简介
@@ -122,7 +99,9 @@
             <pre style="white-space: pre-wrap;word-wrap: break-word;border: 0px;line-height: 2;">{{$company->profile}}</pre>
         </div>
     </div>
+@stop
 
+@section('center_content')
     <div class="panel panel-default">
         <div class="panel-heading">
             企业动态
@@ -173,27 +152,41 @@
         }
     }
 
-    $(".user_comments").click(function(){
+    function sendMessage(obj){
         @if(Auth::user())
-            var id = $(this).attr('data-id');
-            if(id == '{{Auth::user()->id }}'){
-                alert('不能给自己留言！');
-                return ;
-            }
-            $('#m_content').val('');
-            $('#m_message_user').html($(this).attr('data-user'));
-            $('#m_user_id').val(id);
-            $('#message_modal').modal('show');
-        @else
-            alert('请先登录，或您可直接电话联系-'+$(this).attr('data-user'));
-        @endif
-    });
-
-    $("#m_sumit").click(function(){
-        var content = $('#m_content').val();
-        if($.trim(content) != ''){
-            $( "#modal_form" ).submit();
+        var id = $(obj).attr('data-id');
+        if(id == '{{Auth::user()->id }}'){
+            alert('不能给自己留言！');
+            return ;
         }
+        $('#m_content').val('');
+        $('#m_message_user').html($(obj).attr('data-user'));
+        $('#m_user_id').val(id);
+        $('#message_modal').modal('show');
+        @else
+            alert('请先登录，或您可直接电话联系-'+$(obj).attr('data-user'));
+        @endif
+    };
+
+    $(function() {
+        $("[data-toggle='popover']").popover({
+            html : true,
+            delay:{show:500, hide:1000},
+            content: function() {
+                var obj = $(this);
+                var html="<div>手机号码："+  obj.attr('data-mobile') +"</div><div>座机："+  obj.attr('data-phone') +"</div>";
+                html=html+ "<div>电子邮箱："+  obj.attr('data-email') +"</div><div>QQ号："+  obj.attr('data-qq') +"</div>";
+                html=html+ "<div><a href='javascript:void(0);' onclick='sendMessage(this)' data-id="+obj.attr('data-id')+" data-user='"+ obj.attr('data-name') +"("+ obj.attr('data-mobile') +")' class='btn btn-primary'><i class='fa fa-envelope'></i>发送消息</a></div>";
+                return html;
+            }
+        });
+
+        $("#m_sumit").click(function(){
+            var content = $('#m_content').val();
+            if($.trim(content) != ''){
+                $( "#modal_form" ).submit();
+            }
+        });
     });
 
     $(document).ready(function(){

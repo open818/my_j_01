@@ -1,7 +1,7 @@
 @foreach($data as $dynamic)
     <li class="list-group-item">
         <small class="block text-muted"><i class="fa fa-clock-o"></i>{{$dynamic->created_at}} {{$dynamic->user_name}}</small>
-        <p>{{$dynamic->content}}</p>
+        <p style="font-size: 16px;">{{$dynamic->content}}</p><br><br>
         @if(!empty($dynamic->attachments) && count($dynamic->attachments) > 0)
             <div class="mail-attachment">
                 <p>
@@ -15,14 +15,13 @@
                             <span class="corner"></span>
                             <a href="file/{{$att->path}}" target="_blank">
                                 @if(in_array($att->ext,array('png','jpg','gif')))
-                                <div class="image">
-                                    <img alt="image" class="img-responsive" src="img/{{$att->path}}">
-                                </div>
+                                    <div class="image">
+                                        <img alt="image" class="img-responsive" src="img/{{$att->path}}">
+                                    </div>
                                 @else
-
-                                <div class="icon">
-                                    {{$att->name}}
-                                </div>
+                                    <div class="icon">
+                                        {{$att->name}}
+                                    </div>
                                 @endif
                             </a>
                         </div>

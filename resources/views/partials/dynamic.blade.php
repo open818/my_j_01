@@ -1,6 +1,6 @@
 @foreach($data as $dynamic)
     <li class="list-group-item">
-        <div>
+        <div class="row">
             <div class="col-md-9">
                 <a target="_blank" href="/company/show/{{$dynamic->company->id}}"><h5>{{$dynamic->company->name}}</h5></a>
             </div>
@@ -11,11 +11,11 @@
             </div>
         </div>
 
-        <div>
-            公司地址：{{$dynamic->company->business_address}}{{$dynamic->company->address_details}}
+        <div class="row" style="margin: 6px 0;">
+            <b>{{$dynamic->user_name}}</b> 发布了一条动态
         </div>
-        <div>
-            <p>最新动态：{{$dynamic->content}}</p>
+        <div class="well">
+            <p style="font-size: 16px;">{{$dynamic->content}}</p><br><br>
             @if(!empty($dynamic->attachments) && count($dynamic->attachments) > 0)
                 <div class="mail-attachment">
                     <p>

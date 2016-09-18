@@ -1,6 +1,6 @@
 @foreach($data as $company)
     <li class="list-group-item">
-        <div>
+        <div  class="row">
             <div class="col-md-9">
                 <a target="_blank" href="/company/show/{{$company->id}}"><h5>{{$company->name}}</h5></a>
             </div>
@@ -11,21 +11,12 @@
             </div>
         </div>
 
-        <div>
-            公司地址：{{$company->business_address}}{{$company->address_details}}
+        <div class="row" style="margin: 6px 0;">
+            <b>{{$company->dynamic->user_name}}</b> 发布了一条动态
         </div>
-        @if(!empty($company->business_brands))
-        <div>
-            主营品牌：@php($i=1) @foreach($company->business_brands as $brand) {{$brand->name}} @if($i != count($company->business_brands)) 、@php($i++) @endif @endforeach
-        </div>
-        @endif
-        @if(!empty($dynamic->company->business_categories))
-        <div>
-            经营类目：@php($i=1) @foreach($company->business_categories as $cate) {{$cate->name}} @if($i != count($company->business_categories)) 、@php($i++) @endif @endforeach
-        </div>
-        @endif
-        <div>
-            <p>最新动态：{{$company->dynamic->content}}</p>
+
+        <div class="well">
+            <p style="font-size: 16px;">{{$company->dynamic->content}}</p><br><br>
             @if(count($company->dynamic->attachments) > 0)
                 <div class="mail-attachment">
                     <p>
@@ -43,15 +34,10 @@
                                                 <img alt="image" class="img-responsive" src="img/{{$att->path}}">
                                             </div>
                                         @else
-
                                             <div class="icon">
-                                                <i class="fa fa-file"></i>
+                                                {{$att->name}}
                                             </div>
                                         @endif
-
-                                        <div class="file-name">
-                                            {{$att->name}}
-                                        </div>
                                     </a>
                                 </div>
                             </div>

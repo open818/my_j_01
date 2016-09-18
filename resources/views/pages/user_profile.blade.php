@@ -35,21 +35,8 @@
                 </div>
             </div>
 
-            <div class="form-group{{ $errors->has('pic') ? ' has-error' : '' }}">
-                <label class="col-md-4 control-label">头像：</label>
-                <div class="col-md-6">
-                    <input id="input-id" name="pic" type="file">
-
-                    @if ($errors->has('pic'))
-                        <span class="help-block">
-                            <strong>{{ $errors->first('pic') }}</strong>
-                        </span>
-                    @endif
-                </div>
-            </div>
-
             <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                <label for="password" class="col-md-4 control-label">邮&nbsp;&nbsp;箱：</label>
+                <label for="email" class="col-md-4 control-label">邮箱：</label>
 
                 <div class="col-md-6">
                     <input id="email" type="text" class="form-control" name="email" value="{{ old('email') }}">
@@ -62,8 +49,22 @@
                 </div>
             </div>
 
+            <div class="form-group{{ $errors->has('QQ') ? ' has-error' : '' }}">
+                <label for="QQ" class="col-md-4 control-label">QQ号：</label>
+
+                <div class="col-md-6">
+                    <input id="QQ" type="text" class="form-control" name="QQ" value="{{ old('QQ') }}">
+
+                    @if ($errors->has('QQ'))
+                        <span class="help-block">
+                            <strong>{{ $errors->first('QQ') }}</strong>
+                        </span>
+                    @endif
+                </div>
+            </div>
+
             <div class="form-group{{ $errors->has('phone') ? ' has-error' : '' }}">
-                <label for="password" class="col-md-4 control-label">座&nbsp;&nbsp;机：</label>
+                <label for="password" class="col-md-4 control-label">座机：</label>
 
                 <div class="col-md-6">
                     <input id="phone" type="text" class="form-control" name="phone" value="{{ old('phone') }}">

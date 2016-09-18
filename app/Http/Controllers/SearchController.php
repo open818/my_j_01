@@ -28,12 +28,6 @@ class SearchController extends Controller
 
         //供应商表
         return Company::where('status', 1)->Where(function($query) use($search_key){
-            //1、品牌检索
-            $match_brands = Brand::Where('name','like',$search_key)->get();
-
-            //2、分类检索
-            $match_categories = Category::Where('status', 1)->Where('name','like',$search_key)->get();
-
             //3、联系人
             $match_companyuser = CompanyUser::where('status',1)->whereHas('user', function($query) use($search_key){
                 $query->where('name','like',$search_key)->orWhere('mobile','like',$search_key);
@@ -47,18 +41,6 @@ class SearchController extends Controller
                 ->orWhere('business_address','like',$search_key)
                 //公司详细地址
                 ->orWhere('address_details','like',$search_key);
-
-            if($match_brands){
-                foreach ($match_brands as $brand){
-                    $query->orWhere('business_brands', 'like', ','.$brand->id.',');
-                }
-            }
-
-            if($match_categories){
-                foreach ($match_categories as $category){
-                    $query->orWhere('business_categories', 'like', ','.$category->id.',');
-                }
-            }
 
             if($match_companyuser){
                 foreach ($match_companyuser as $companyuser){
@@ -79,7 +61,7 @@ class SearchController extends Controller
             ],
         ];
 
-        $rs = $this->getSearchQuery($search_key)->get(['business_address','business_brands','business_categories_p']);
+        $rs = $this->getSearchQuery($search_key)->get(['business_address']);
         $brands_ids = array();
         $category_ids = array();
         $province_s = array();
@@ -90,47 +72,16 @@ class SearchController extends Controller
                     $province_s[$province] = $province;
                 }
             }
-
-            if(!empty($company->business_brands)){
-                $temp = array_merge($brands_ids, explode(",", $company->business_brands));
-                $temp = array_flip($temp);
-                $brands_ids = array_keys($temp);
-            }
-
-            if(!empty($company->business_categories_p)){
-                $temp = array_merge($category_ids, explode(",", $company->business_categories_p));
-                $temp = array_flip($temp);
-                $category_ids = array_keys($temp);
-            }
         }
 
-        $brands = array();
-        if(!empty($brands_ids)){
-            $brands = Brand::whereIn('id',$brands_ids)->get(['id','name']);
-        }
-
-        $categories = array();
-        if(!empty($category_ids)){
-            $categories = Category::whereIn('id',$category_ids)->get(['id','name']);
-        }
-
-        return view('pages.search', compact('search_key','panel','brands','categories','province_s'));
+        return view('pages.search', compact('search_key','panel','province_s'));
     }
 
     public function ajax_search($search_key, $page = 1)
     {
-        $category_id = request()->input('id1', 0);
-        $brand_id = request()->input('id2', 0);
         $area = request()->input('area', '');
         //供应商表
         $query = $this->getSearchQuery($search_key);
-        if($brand_id > 0){
-            $query->whereRaw("CONCAT(',',business_brands,',') like CONCAT('%',".$brand_id.",'%')");
-        }
-
-        if($category_id > 0){
-            $query->whereRaw("CONCAT(',',business_categories,',') like CONCAT('%',".$category_id.",'%')");
-        }
 
         if(!empty($area)){
             $query->where("business_address","like", $area.'%');
@@ -152,14 +103,6 @@ class SearchController extends Controller
                 }
 
                 $company->dynamic = $dynamic;
-            }
-
-            if(!empty($company->business_brands)){
-                $company->business_brands = Brand::whereRaw('id in ('.$dynamic->company->business_brands.')')->get();
-            }
-
-            if(!empty($company->business_categories)){
-                $company->business_categories = Category::whereRaw('id in ('.$dynamic->company->business_categories.')')->get();
             }
         }
 

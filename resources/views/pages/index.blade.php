@@ -45,11 +45,11 @@
 
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        企业动态
+                        商机动态
                     </div>
                     <div class="panel-body">
                         <div class="search_condition" style="margin-bottom: 20px;">
-                            <button class="active condition">所有</button>
+                            <button class="active condition">所有行业</button>
                             @foreach($categories as $category)
                                 <button class="condition" data-id="{{$category->id}}">{{$category->name}}</button>
                             @endforeach

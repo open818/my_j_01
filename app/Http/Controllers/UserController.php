@@ -30,14 +30,14 @@ class UserController extends Controller
         $user = Auth::user();
         $v = Validator::make($request->all(), [
             'name' => 'required|max:10',
-            'pic'  => 'image',
             'email'  => 'email',
+            'QQ'  => 'digits_between:100000,90000000000',
             'phone' => 'regex:/^(0[0-9]{2,3}\-)?([2-9][0-9]{6,7})+(\-[0-9]{1,4})?$/',
         ],[
             'name.required' => '真实姓名必填',
             'name.max' => '真实姓名过长',
-            'pic.image' => '必须是图片格式2',
             'email.email' => '电子邮箱格式不对',
+            'QQ.digits_between' => 'QQ号格式不正确',
             'phone.regex' => '座机格式不正确',
         ]);
 
@@ -46,9 +46,7 @@ class UserController extends Controller
         }
 
         //user update
-        $file = File::section('profile_img')->upload($request->file('pic'));
         $user->fill($request->all());
-        $user->pic_url = $file;
         $user->save();
 
         return redirect()->back();

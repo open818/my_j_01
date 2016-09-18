@@ -23,22 +23,6 @@
                                 @endforeach
                             </div>
                             @endif
-                            @if(count($categories)>0)
-                            <div class="search_condition" data-index="1">
-                                类目：<a class="active condition">所有</a>
-                                @foreach($categories as $category)
-                                    <a class="condition" data-id="{{$category->id}}">{{$category->name}}</a>
-                                @endforeach
-                            </div>
-                            @endif
-                            @if(count($categories)>0)
-                            <div class="search_condition" data-index="2">
-                                品牌：<a class="active condition">所有</a>
-                                    @foreach($brands as $brand)
-                                        <a class="condition" data-id="{{$brand->id}}">{{$brand->name}}</a>
-                                    @endforeach
-                            </div>
-                            @endif
                         </div>
 
                         <div class="search_company">
@@ -81,8 +65,6 @@
     @parent
     <script>
         var lastid = 0;
-        var id1 = 0;
-        var id2 = 0;
         var id3 = '';
         var loading = false;
 
@@ -94,7 +76,7 @@
                 $.ajax({
                     type: 'GET',
                     url: url ,
-                    data: {id1:id1,id2:id2,area:id3},
+                    data: {area:id3},
                     success: function(data) {
                         if(data.count > 0){
                             var _ul = $('.search_company > ul');

@@ -93,7 +93,7 @@ class CompanyController extends Controller
         $company->save();
 
         return redirect('/')->with([
-            'alert_message' => "修改成功！",
+            'alert_message' => "提交成功！",
         ]);
     }
 
