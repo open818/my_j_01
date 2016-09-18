@@ -45,14 +45,6 @@
                         <td>{{$employee->user->name}}</td>
                         <td>{{$employee->position}}</td>
                         <td>{{$employee->territory}}</td>
-                        <td>
-                            <a href="javascript:void(0);">
-                                <i class="fa fa-phone" data-toggle="tooltip" title="{{$employee->user->mobile}}"></i>
-                            </a>
-                            <a href="javascript:void(0);" data-id="{{$employee->user->id}}" data-user="{{$employee->user->name}}({{$employee->user->mobile}})"  class="user_comments">
-                                <i class="fa fa-comments" data-toggle="tooltip" title="点击留言"></i>
-                            </a>
-                        </td>
                     </tr>
                 @endforeach
             </table>
