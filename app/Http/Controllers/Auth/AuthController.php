@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\CompanyUser;
+use Auth;
+use App\Models\LogUserLogin;
 use App\Models\User;
 use Validator;
 use Illuminate\Http\Request;
@@ -87,6 +90,63 @@ class AuthController extends Controller
     }
 
     /**
+     * Handle a login request to the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function login(Request $request)
+    {
+        $this->validateLogin($request);
+
+        // If the class is using the ThrottlesLogins trait, we can automatically throttle
+        // the login attempts for this application. We'll key this by the username and
+        // the IP address of the client making these requests into this application.
+        $throttles = $this->isUsingThrottlesLoginsTrait();
+
+        if ($throttles && $lockedOut = $this->hasTooManyLoginAttempts($request)) {
+            $this->fireLockoutEvent($request);
+
+            return $this->sendLockoutResponse($request);
+        }
+
+        $credentials = $this->getCredentials($request);
+
+        if (Auth::guard($this->getGuard())->attempt($credentials, $request->has('remember'))) {
+            //获取用户公司信息
+            $user = Auth::user();
+            $c_u = CompanyUser::with('company')->where('user_id', $user->id)->first();
+            $company = $c_u->company;
+            $company->position = $c_u->position;
+            $company->territory = $c_u->territory;
+            $company->isadmin = $c_u->isadmin;
+            $company->status = $c_u->status;
+            $company->company_user_id = $c_u->id;
+            $user->company = $company;
+            Auth::setUser($user);
+
+            $log_data = [
+                'user_id'=>Auth::user()->id,
+                'login_mobile'=>$request->input($this->loginUsername()),
+                'login_ip'=>$request->ip(),
+                'source'=>'浏览器',
+                'user_agent'=>$request->header('user-agent')
+            ];
+            $this->login_logs($log_data);
+            return $this->handleUserWasAuthenticated($request, $throttles);
+        }
+
+        // If the login attempt was unsuccessful we will increment the number of attempts
+        // to login and redirect the user back to the login form. Of course, when this
+        // user surpasses their maximum number of attempts they will get locked out.
+        if ($throttles && ! $lockedOut) {
+            $this->incrementLoginAttempts($request);
+        }
+
+        return $this->sendFailedLoginResponse($request);
+    }
+
+    /**
      * 创建用户
      *
      * @param  array  $data
@@ -101,5 +161,9 @@ class AuthController extends Controller
             'mobile' => $data['mobile'],
             'password' => bcrypt($data['password']),
         ]);
+    }
+
+    private function login_logs($data){
+        LogUserLogin::create($data);
     }
 }

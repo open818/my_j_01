@@ -53,14 +53,14 @@ class UserController extends Controller
     }
 
     public function relevancy_company(){
-        $companies = Auth::user()->companies();
-        if(count($companies) > 0){
-            if($companies[0]->status == 2){
+        $company = Auth::user()->company;
+        if(!empty($company)){
+            if($company->status == 2){
                 //待审核,获取管理员信息
-                $admin = CompanyUser::where('company_id', $companies[0]->company_id)->where('isadmin','Y')->first()->user;
-                return view('pages.user_relevancy_view',compact('companies','admin'));
+                $admin = CompanyUser::where('company_id', $company->id)->where('isadmin','Y')->first()->user;
+                return view('pages.user_relevancy_view',compact('company','admin'));
             }else{
-                return view('pages.user_relevancy_view',compact('companies'));
+                return view('pages.user_relevancy_view',compact('company'));
             }
         }else{
             return view('pages.user_relevancy');
@@ -135,22 +135,22 @@ class UserController extends Controller
     }
 
     /**
-     *
+     * 获得关联企业的所有用户
      */
     public function getRelevancyUser(){
-        $companies = Auth::user()->companies();
-        $users = CompanyUser::with('user')->where('company_id', $companies[0]->company_id)->get();
+        $company = Auth::user()->company;
+        $users = CompanyUser::with('user')->where('company_id', $company->id)->get();
         return view('pages.company_user',compact('users'));
     }
 
     public function applyRelevancyUser($id){
-        $companies = Auth::user()->companies();
-        if($companies[0]->isadmin == 'N'){
+        $company = Auth::user()->company;
+        if($company->isadmin == 'N'){
             return redirect()->back();
         }
 
         $user = CompanyUser::find($id);
-        if(!$user || $user->status != 2 || $user->company_id != $companies[0]->company_id){
+        if(!$user || $user->status != 2 || $user->company_id != $company->id){
             return redirect()->back();
         }
         $user->status = 1;
@@ -159,19 +159,19 @@ class UserController extends Controller
     }
 
     public function adminRelevancyUser($id){
-        $companies = Auth::user()->companies();
-        if($companies[0]->isadmin == 'N'){
+        $company = Auth::user()->company;
+        if($company->isadmin == 'N'){
             return redirect()->back();
         }
 
         $user = CompanyUser::find($id);
-        if(!$user || $user->status != 1 || $user->company_id != $companies[0]->company_id){
+        if(!$user || $user->status != 1 || $user->company_id != $company->id){
             return redirect()->back();
         }
         $user->isadmin = 'Y';
         $user->save();
 
-        $my = $companies[0];
+        $my = CompanyUser::find($company->company_user_id);
         $my->isadmin = 'N';
         $my->save();
 
@@ -179,13 +179,13 @@ class UserController extends Controller
     }
 
     public function deleteRelevancyUser($id){
-        $companies = Auth::user()->companies();
-        if($companies[0]->isadmin == 'N'){
+        $company = Auth::user()->company;
+        if($company->isadmin == 'N'){
             return redirect()->back();
         }
 
         $user = CompanyUser::find($id);
-        if(!$user || $user->isadmin == 'Y' || $user->company_id != $companies[0]->company_id){
+        if(!$user || $user->isadmin == 'Y' || $user->company_id != $company->id){
             return redirect()->back();
         }
         $user->delete();
@@ -210,7 +210,7 @@ class UserController extends Controller
         return view('pages.user_message');
     }
 
-    //
+    //获取用户留言
     public function ajax_getUserMessage ($lastid = 0){
         $page_size = 2;
 
@@ -229,5 +229,9 @@ class UserController extends Controller
             $message->save();
         }
         return response()->json(['count'=>count($rs), 'html'=> (string)$view, 'lastid'=>(string)($rs[count($rs)-1]->id)]);
+    }
+
+    public function ajax_getUserInfo ($id){
+
     }
 }

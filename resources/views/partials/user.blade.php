@@ -1,11 +1,11 @@
 <!-- Login -->
 <div class="panel panel-default">
     <div class="panel-body">
-        @if(count(Auth::user()->companies()) > 0)
+        @if(Auth::user()->company)
         <div class="col-md-12 text-center">
-            <a href="/company/show/{{Auth::user()->companies()[0]->company->id}}">
-                <h5>{{Auth::user()->companies()[0]->company->name}}</h5>
-                @if(Auth::user()->companies()[0]->status == 2)
+            <a href="/company/show/{{Auth::user()->company->id}}">
+                <h5>{{Auth::user()->company->name}}</h5>
+                @if(Auth::user()->company->status == 2)
                     <small>(待验证)</small>
                 @endif
             </a>
@@ -22,9 +22,9 @@
             </div>
             <div class="col-md-2 text-center h4" style="padding-top: 10px;">|</div>
             <div class="col-md-5 text-center h4">
-                @if(count(Auth::user()->companies()) > 0)
-                    <a href="/company/show/{{Auth::user()->companies()[0]->company->id}}">
-                        {{ \App\Models\CompanyDynamic::where('company_id', Auth::user()->companies()[0]->company->id)->count()  }}<br>商机
+                @if(Auth::user()->company)
+                    <a href="/company/show/{{Auth::user()->company->id}}">
+                        {{ \App\Models\CompanyDynamic::where('company_id', Auth::user()->company->id)->count()  }}<br>商机
                     </a>
                 @else
                     <a href="/user/relevancy">企业关联</a>

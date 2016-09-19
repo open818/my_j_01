@@ -22,9 +22,15 @@ class CompanyDynamicController extends Controller
     private $page_size = 2;
 
     public function dynamic_add(){
-        if(count(Auth::user()->able_companies()) == 0){
+        if(empty(Auth::user()->company)){
             return redirect('/user/relevancy')->with([
                 'alert_message' => "请先关联企业！",
+            ]);
+        }
+
+        if(Auth::user()->company->status==2 ){
+            return redirect('/user/relevancy')->with([
+                'alert_message' => "请先等关联企业管理员审核通过！",
             ]);
         }
         $categories = Category::where('status', 1)->get();
@@ -45,13 +51,13 @@ class CompanyDynamicController extends Controller
             $this->throwValidationException($request, $v);
         }
 
-        $companies = Auth::user()->companies();
-        if(empty($companies) || count($companies) > 1){
+        $company = Auth::user()->company;
+        if(empty($company)){
             abort(404, '非法操作！');
         }
 
         $dynamic = new CompanyDynamic();
-        $dynamic->company_id = $companies[0]->company_id;
+        $dynamic->company_id = $company->id;
         $dynamic->category_id = $request->input('category_id');
         $dynamic->content = $request->input('content');
         $dynamic->attachments = $request->input('attachments');

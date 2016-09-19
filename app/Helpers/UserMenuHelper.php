@@ -23,13 +23,13 @@ class UserMenuHelper
             ['route' => '/user/message/show', 'text' => '留言信息', 'icon' => 'fa fa-comments', 'num'=>$cn],
         ];
 
-        if (count(Auth::user()->able_companies()) > 0) {
+        if (!empty($user->company) && $user->company->status == 1) {
             $menu = array_merge($menu, [
                 ['route' => '/company/dynamic/add', 'text' => '发布商机', 'icon' => 'glyphicon glyphicon-cog'],
             ]);
         }
 
-        if (Auth::user()->isAdmin()) {
+        if ($user->company->isadmin == 'Y') {
             //获取待审核用户
             $company = CompanyUser::where('user_id', $user->id)->where('isadmin','Y')->first();
             $cn = CompanyUser::where('company_id', $company->id)->where('status', 2)->count();

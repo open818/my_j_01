@@ -28,17 +28,17 @@ class CompanyController extends Controller
 
     public function edit(Request $request)
     {
-        $companies = Auth::user()->companies();
-        if(empty($companies) || count($companies) > 1 ){
+        $company = Auth::user()->company;
+        if(empty($company)){
             abort(404, '数据错误！');
         }
 
-        if($companies[0]->isadmin != 'Y'){
+        if($company->isadmin != 'Y'){
             abort(404, '非法操作！');
         }
 
         if(empty($request->session()->getOldInput())){
-            $company = Company::findOrFail($companies[0]->company_id)->toArray();
+            $company = Company::findOrFail($company->id)->toArray();
             if(!empty($company['business_address'])){
                 $strarr = explode(" ", $company['business_address']);
                 $company['province'] = $strarr[0];
@@ -77,12 +77,12 @@ class CompanyController extends Controller
         }
 
         $id = $request->input('id');
-        $companies = Auth::user()->companies();
-        if(empty($companies) || count($companies) > 1 || $companies[0]->isadmin != 'Y' || $companies[0]->company_id != $id){
+        $company = Auth::user()->company;
+        if(empty($company) || $company->isadmin != 'Y' || $company->id != $id){
             abort(404, '非法操作！');
         }
 
-        $company = Company::findOrFail($companies[0]->company_id);
+        $company = Company::findOrFail($company->id);
         
         //user update
         $company->business_address = $request->input('province').' '.$request->input('city');
