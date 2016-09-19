@@ -37,12 +37,9 @@
         <div class="panel-body">
             <table class="table table-hover">
                 @foreach($company->employees as $employee)
-                    <tr class="bind_hover_card" data-toggle="popover" data-placement="bottom" data-trigger="hover"
-                        data-id="{{$employee->user->id}}"
-                        data-name="{{$employee->user->name}}" data-position="{{$employee->position}}" data-territory="{{$employee->territory}}"
-                        data-qq="{{$employee->user->QQ}}" data-email="{{$employee->user->email}}" data-mobile="{{$employee->user->mobile}}" data-phone="{{$employee->user->phone}}"
-                    >
-                        <td>{{$employee->user->name}}</td>
+                    <tr>
+                        <td class="bind_hover_card" data-toggle="popover" data-placement="bottom" data-trigger="hover"
+                            data-id="{{$employee->user->id}}" >{{$employee->user->name}}</td>
                         <td>{{$employee->position}}</td>
                         <td>{{$employee->territory}}</td>
                     </tr>
@@ -144,33 +141,24 @@
         }
     }
 
-    function sendMessage(obj){
-        @if(Auth::user())
-        var id = $(obj).attr('data-id');
-        if(id == '{{Auth::user()->id }}'){
-            alert('不能给自己留言！');
-            return ;
-        }
-        $('#m_content').val('');
-        $('#m_message_user').html($(obj).attr('data-user'));
-        $('#m_user_id').val(id);
-        $('#message_modal').modal('show');
-        @else
-            alert('请先登录，或您可直接电话联系-'+$(obj).attr('data-user'));
-        @endif
-    };
-
     $(function() {
-        $("[data-toggle='popover']").popover({
-            html : true,
-            delay:{show:500, hide:1000},
-            content: function() {
-                var obj = $(this);
-                var html="<div>手机号码："+  obj.attr('data-mobile') +"</div><div>座机："+  obj.attr('data-phone') +"</div>";
-                html=html+ "<div>电子邮箱："+  obj.attr('data-email') +"</div><div>QQ号："+  obj.attr('data-qq') +"</div>";
-                html=html+ "<div><a href='javascript:void(0);' onclick='sendMessage(this)' data-id="+obj.attr('data-id')+" data-user='"+ obj.attr('data-name') +"("+ obj.attr('data-mobile') +")' class='btn btn-primary'><i class='fa fa-envelope'></i>发送消息</a></div>";
-                return html;
-            }
+        $("[data-toggle='popover']").hover(function(){
+            var obj = $(this);
+            $.ajax({
+                url : '/popover/userinfo/'+obj.attr('data-id'),
+                type : 'get',
+                async: false,//使用同步的方式,true为异步方式
+                success : function(data){
+                    obj.popover({
+                        html: true,
+                        trigger: 'hover',
+                        placement: 'bottom',
+                        container: 'body',
+                        content: data,
+                        delay: { "show": 500, "hide": 200 }
+                    })
+                },
+            });
         });
 
         $("#m_sumit").click(function(){

@@ -125,19 +125,42 @@
             }
         }
 
-        $(".condition").click(function(){
-            if($(this).hasClass('active')){
-                return '';
-            }
+        $(function() {
+            $("[data-toggle='popover']").hover(function(){
+                var obj = $(this);
+                $.ajax({
+                    url : '/popover/userinfo/'+obj.attr('data-id'),
+                    type : 'get',
+                    async: false,//使用同步的方式,true为异步方式
+                    success : function(data){
+                        obj.popover({
+                            html: true,
+                            trigger: 'hover',
+                            placement: 'bottom',
+                            container: 'body',
+                            content: data,
+                            delay: { "show": 500, "hide": 200 }
+                        })
+                    },
+                });
+            });
 
-            id1 = $(this).attr('data-id');
-            lastTime='';
-            $('.company_dynamic > ul').html('');
-            $("#item_end").hide();
-            loadDynamicData();
-            $(this).parent().children('button').removeClass('active');
-            $(this).addClass('active');
+            $(".condition").click(function(){
+                if($(this).hasClass('active')){
+                    return '';
+                }
+
+                id1 = $(this).attr('data-id');
+                lastTime='';
+                $('.company_dynamic > ul').html('');
+                $("#item_end").hide();
+                loadDynamicData();
+                $(this).parent().children('button').removeClass('active');
+                $(this).addClass('active');
+            });
         });
+
+
 
         $(document).ready(function(){
             loadDynamicData();

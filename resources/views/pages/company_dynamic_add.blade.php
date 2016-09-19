@@ -29,7 +29,7 @@
             </div>
 
             <div class="form-group">
-                <textarea class="form-control" rows="5" id="content" name="content"></textarea>
+                <textarea placeholder="填写业务推广或求购等商机信息前请先选择商机内容的分类，发布后，会展示在平台公共首页面，发布的信息内容需合法。" class="form-control" rows="5" id="content" name="content"></textarea>
             </div>
 
             <div class="form-group">

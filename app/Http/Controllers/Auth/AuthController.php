@@ -113,18 +113,7 @@ class AuthController extends Controller
         $credentials = $this->getCredentials($request);
 
         if (Auth::guard($this->getGuard())->attempt($credentials, $request->has('remember'))) {
-            //获取用户公司信息
-            $user = Auth::user();
-            $c_u = CompanyUser::with('company')->where('user_id', $user->id)->first();
-            $company = $c_u->company;
-            $company->position = $c_u->position;
-            $company->territory = $c_u->territory;
-            $company->isadmin = $c_u->isadmin;
-            $company->status = $c_u->status;
-            $company->company_user_id = $c_u->id;
-            $user->company = $company;
-            Auth::setUser($user);
-
+            //写入登录日志
             $log_data = [
                 'user_id'=>Auth::user()->id,
                 'login_mobile'=>$request->input($this->loginUsername()),

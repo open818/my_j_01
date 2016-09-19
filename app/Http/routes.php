@@ -40,6 +40,7 @@ Route::get('/', function () {
     return view('pages.index',compact('panel', 'banners', 'main_config','categories'));
 });
 
+Route::get('/popover/userinfo/{id}', 'UserController@ajax_getUserInfo');
 Route::get('/search/{search_key}', 'SearchController@search');
 Route::get('/search_item/{search_key}/{page?}', 'SearchController@ajax_search');
 Route::get('/company/show/{id}/{tab?}', 'CompanyController@show');

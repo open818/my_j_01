@@ -64,4 +64,15 @@ $(document).ready(function(){
         $(this).fadeTo('fast',0.7);
     })
 
-})
+});
+
+function sendMessage(type, id, username){
+    if(type == 'true'){
+        $('#m_content').val('');
+        $('#m_message_user').html(username);
+        $('#m_user_id').val(id);
+        $('#message_modal').modal('show');
+    }else{
+        alert('请先登录，或您可直接电话联系-'+username);
+    }
+};

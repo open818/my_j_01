@@ -3,7 +3,7 @@
     <div class="panel-body">
         @if(Auth::user()->company)
         <div class="col-md-12 text-center">
-            <a href="/company/show/{{Auth::user()->company->id}}">
+            <a target="_blank" href="/company/show/{{Auth::user()->company->id}}">
                 <h5>{{Auth::user()->company->name}}</h5>
                 @if(Auth::user()->company->status == 2)
                     <small>(待验证)</small>

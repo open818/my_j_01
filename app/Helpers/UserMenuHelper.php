@@ -27,18 +27,19 @@ class UserMenuHelper
             $menu = array_merge($menu, [
                 ['route' => '/company/dynamic/add', 'text' => '发布商机', 'icon' => 'glyphicon glyphicon-cog'],
             ]);
+
+            if ($user->company->isadmin == 'Y') {
+                //获取待审核用户
+                $company = CompanyUser::where('user_id', $user->id)->where('isadmin','Y')->first();
+                $cn = CompanyUser::where('company_id', $company->id)->where('status', 2)->count();
+
+                $menu = array_merge($menu, [
+                    ['route' => '/company/edit', 'text' => '企业设置', 'icon' => 'glyphicon glyphicon-cog', 'divider' => 1],
+                    ['route' => '/company/relevancy/user', 'text' => '企业员工', 'icon' => 'glyphicon glyphicon-cog', 'num' => $cn],
+                ]);
+            }
         }
 
-        if ($user->company->isadmin == 'Y') {
-            //获取待审核用户
-            $company = CompanyUser::where('user_id', $user->id)->where('isadmin','Y')->first();
-            $cn = CompanyUser::where('company_id', $company->id)->where('status', 2)->count();
-
-            $menu = array_merge($menu, [
-                ['route' => '/company/edit', 'text' => '企业设置', 'icon' => 'glyphicon glyphicon-cog', 'divider' => 1],
-                ['route' => '/company/relevancy/user', 'text' => '企业员工', 'icon' => 'glyphicon glyphicon-cog', 'num' => $cn],
-            ]);
-        }
         //dd($menu);
         return $returnArray ? $menu : json_encode($menu);
     }

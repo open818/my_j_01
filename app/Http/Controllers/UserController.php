@@ -232,6 +232,24 @@ class UserController extends Controller
     }
 
     public function ajax_getUserInfo ($id){
+        $user = User::find($id);
+        if(!Auth::user()){
+            $type=1;
+        }elseif(Auth::user()->id == $id){
+            $type=2;
+        }else{
+            $type=3;
+        }
+        if($user){
+            $html = "<div>手机号码：".$user->mobile."</div><div>座机：".$user->phone."</div>";
+            $html .= "<div>电子邮箱：".$user->email."</div><div>QQ号：".$user->qq."</div>";
+            if($type != 2){
+                $html .= "<div><a href='javascript:void(0);' onclick='sendMessage(".$type.",".$user->id.",\"".$user->name."(".$user->mobile.")\")' class='btn btn-primary'><i class='fa fa-envelope'></i>发送消息</a></div>";
+            }
+        }else{
+            $html = '';
+        }
 
+        return $html;
     }
 }
