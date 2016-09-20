@@ -126,21 +126,22 @@
         }
 
         $(function() {
-            $("[data-toggle='popover']").hover(function(){
+            $("ul").on('click', '.pop', function(){
                 var obj = $(this);
+                obj.off('click');
                 $.ajax({
                     url : '/popover/userinfo/'+obj.attr('data-id'),
                     type : 'get',
-                    async: false,//使用同步的方式,true为异步方式
+                    async: false,
                     success : function(data){
                         obj.popover({
                             html: true,
-                            trigger: 'hover',
+                            trigger: 'click',
                             placement: 'bottom',
                             container: 'body',
                             content: data,
                             delay: { "show": 500, "hide": 200 }
-                        })
+                        }).popover('show');
                     },
                 });
             });

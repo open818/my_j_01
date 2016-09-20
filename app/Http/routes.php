@@ -29,10 +29,10 @@ Route::get('/', function () {
 
     //
     $banners = [
-        ['img'=>'/img/banner/01.png','alt'=>'a','url'=>'http://www.baidu.com'],
-        ['img'=>'/img/banner/02.png','alt'=>'a','url'=>'http://www.baidu.com'],
-        ['img'=>'/img/banner/03.png','alt'=>'a','url'=>'http://www.baidu.com'],
-        ['img'=>'/img/banner/04.png','alt'=>'a','url'=>'http://www.baidu.com'],
+        ['img'=>'/img/banner/0920_01.jpg','alt'=>'a','url'=>'http://www.baidu.com'],
+        ['img'=>'/img/banner/0920_02.jpg','alt'=>'a','url'=>'http://www.baidu.com'],
+        /*['img'=>'/img/banner/03.png','alt'=>'a','url'=>'http://www.baidu.com'],
+        ['img'=>'/img/banner/04.png','alt'=>'a','url'=>'http://www.baidu.com'],*/
     ];
 
     $categories = \App\Models\Category::where('status', 1)->get();;

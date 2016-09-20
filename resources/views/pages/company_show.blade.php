@@ -38,8 +38,9 @@
             <table class="table table-hover">
                 @foreach($company->employees as $employee)
                     <tr>
-                        <td class="bind_hover_card" data-toggle="popover" data-placement="bottom" data-trigger="hover"
-                            data-id="{{$employee->user->id}}" >{{$employee->user->name}}</td>
+                        <td>
+                            <a href="javascript:void(0)" class="pop" data-toggle="popover"
+                            data-id="{{$employee->user->id}}" >{{$employee->user->name}}</a></td>
                         <td>{{$employee->position}}</td>
                         <td>{{$employee->territory}}</td>
                     </tr>
@@ -142,21 +143,22 @@
     }
 
     $(function() {
-        $("[data-toggle='popover']").hover(function(){
+        $("td").on('click', '.pop', function(){
             var obj = $(this);
+            obj.off('click');
             $.ajax({
                 url : '/popover/userinfo/'+obj.attr('data-id'),
                 type : 'get',
-                async: false,//使用同步的方式,true为异步方式
+                async: false,
                 success : function(data){
                     obj.popover({
                         html: true,
-                        trigger: 'hover',
+                        trigger: 'click',
                         placement: 'bottom',
                         container: 'body',
                         content: data,
                         delay: { "show": 500, "hide": 200 }
-                    })
+                    }).popover('show');
                 },
             });
         });

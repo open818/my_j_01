@@ -96,6 +96,19 @@
 {!! Html::script('/js/app.js') !!}
 <script>
 	$(function(){
+		$("body").click(function(){
+			//$('.popover').remove();
+			var target = $(event.target);
+
+			if (!target.hasClass('popover')
+					&& !target.hasClass('pop')
+					&& !target.hasClass('popover-content')
+					&& !target.hasClass('popover-title')
+					&& !target.hasClass('arrow')) {
+				$('.popover').remove();
+			}
+		});
+
 		$('#search_btn').click(function(){
 			var key = $('#search_key').val();
 			key = $.trim(key);

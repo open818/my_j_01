@@ -6081,6 +6081,8 @@ html,
 body {
   height: 100%;
   font-weight: 300;
+  /*background-color: #d4d5e0;
+  background-image: url("/img/bg.png");*/
 }
 footer {
   background: #ecf0f1;

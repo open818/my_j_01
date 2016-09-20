@@ -26,6 +26,14 @@
             </div>
 
             <div class="form-group">
+                <label for="name" class="col-md-4 control-label">负责区域：</label>
+
+                <div class="col-md-6">
+                    <label for="name" class="control-label">{{$company->territory}}</label>
+                </div>
+            </div>
+
+            <div class="form-group">
                 @if($company->status == 2)
                     <label>请稍后，待 {{$company->name}} 的 管理员{{$admin->name}}({{$admin->mobile}})审核！</label>
                 @endif

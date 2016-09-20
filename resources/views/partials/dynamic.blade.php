@@ -12,8 +12,10 @@
         </div>
 
         <div class="row" style="margin: 6px 0;">
-            <b class="bind_hover_card" data-toggle="popover" data-placement="bottom" data-trigger="hover"
-               data-id="{{$dynamic->user_id}}">{{$dynamic->user_name}}</b> 发布了一条动态
+            <b>
+                <a href="javascript:void(0)" class="pop" data-toggle="popover" data-id="{{$dynamic->user_id}}">
+                {{$dynamic->user_name}}</a>
+            </b>发布了一条动态
         </div>
         <div class="well">
             <p style="font-size: 16px;">{{$dynamic->content}}</p><br><br>

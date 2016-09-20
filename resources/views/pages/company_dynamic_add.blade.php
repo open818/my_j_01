@@ -15,8 +15,9 @@
             {!! Form::open(['url'=>'company/dynamic/add', 'method'=>'post',  'class'=>'form-horizontal']) !!}
             <div class="form-group form-inline">
                 <div class="radio">
-                    <label class="control-label">类型：</label>
-                    <select name="category_id" class="form-control">
+                    <label class="control-label">商机类型：</label>
+                    <select id="category_id" name="category_id" class="form-control">
+                        <option value="0">==请选择==</option>
                         @foreach($categories as $category)
                             <option value="{{$category->id}}">{{$category->name}}</option>
                         @endforeach
@@ -82,6 +83,11 @@
         });
 
         $('#btn_submit').click(function(){
+            if($("#category_id").val() == 0){
+                alert('请选择商机类型！');
+                return;
+            }
+
             if($("#content").val().trim().length == 0){
                 alert('内容不能为空！');
                 return;
