@@ -29,7 +29,7 @@ Route::get('/', function () {
 
     //
     $banners = [
-        ['img'=>'/img/banner/0920_01.jpg','alt'=>'a','url'=>'http://www.baidu.com'],
+        //['img'=>'/img/banner/0920_01.jpg','alt'=>'a','url'=>'http://www.baidu.com'],
         ['img'=>'/img/banner/0920_02.jpg','alt'=>'a','url'=>'http://www.baidu.com'],
         /*['img'=>'/img/banner/03.png','alt'=>'a','url'=>'http://www.baidu.com'],
         ['img'=>'/img/banner/04.png','alt'=>'a','url'=>'http://www.baidu.com'],*/

@@ -94,7 +94,7 @@
 @section('center_content')
     <div class="panel panel-default">
         <div class="panel-heading">
-            企业动态
+            商机动态
         </div>
         <div class="panel-body">
             <div class="company_dynamic">

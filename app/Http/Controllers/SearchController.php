@@ -62,8 +62,6 @@ class SearchController extends Controller
         ];
 
         $rs = $this->getSearchQuery($search_key)->get(['business_address']);
-        $brands_ids = array();
-        $category_ids = array();
         $province_s = array();
         foreach ($rs as $company){
             if(!empty($company->business_address)){
@@ -93,7 +91,7 @@ class SearchController extends Controller
             return response()->json(['count'=>0]);
         }
 
-        foreach($companies as &$company){
+        /*foreach($companies as &$company){
             $max_id = CompanyDynamic::where('company_id', $company->id)->max('id');
             if($max_id > 0){
                 $dynamic = CompanyDynamic::find($max_id);
@@ -104,8 +102,8 @@ class SearchController extends Controller
 
                 $company->dynamic = $dynamic;
             }
-        }
-
+        }*/
+        //return view('partials.search_item', ['data'=>$companies]);
         $view = view('partials.search_item', ['data'=>$companies]);
         return response()->json(['count'=>count($companies), 'html'=> (string)$view, 'lastid'=>$page+1]);
     }

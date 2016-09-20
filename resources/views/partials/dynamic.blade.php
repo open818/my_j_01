@@ -15,7 +15,7 @@
             <b>
                 <a href="javascript:void(0)" class="pop" data-toggle="popover" data-id="{{$dynamic->user_id}}">
                 {{$dynamic->user_name}}</a>
-            </b>发布了一条动态
+            </b>发布了一条商机
         </div>
         <div class="well">
             <p style="font-size: 16px;">{{$dynamic->content}}</p><br><br>

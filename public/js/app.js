@@ -67,7 +67,7 @@ $(document).ready(function(){
 });
 
 function sendMessage(type, id, username){
-    if(type == 'true'){
+    if(type == '3'){
         $('#m_content').val('');
         $('#m_message_user').html(username);
         $('#m_user_id').val(id);

@@ -506,6 +506,7 @@ Insert into business_circle(name,address) values
 ('重固五金一条街','上海市 上海市'),
 ('沪松五金建材','上海市 上海市'),
 ('孙桥建材市场','上海市 上海市'),
+('青安路五金街','上海市 上海市'),
 ('青龙洁具建材市场','四川省 成都市'),
 ('数码港五金机电城','四川省 成都市'),
 ('西部五金机电城','四川省 成都市'),
@@ -3292,3 +3293,27 @@ insert into category(name) values
 ('包装材料'),
 ('物料搬动'),
 ('暖通设备');
+
+
+TRUNCATE table `imp_company`;
+
+update imp_company
+inner join business_circle on imp_company.circle = business_circle.`name`
+set circle_id=business_circle.id;
+
+insert into `user`(name,mobile,password)
+select username,mobile,'$2y$10$oHUK7smX2bfcXQE7rM0KFeRPqgfbGi/rPLp8S2SYaBhnGeIlE1SD2' from imp_company
+
+update imp_company
+inner join `user` on imp_company.mobile = `user`.`mobile`
+set user_id=`user`.id;
+
+insert into `company`(name,profile,business_circle_id,business_address,address_details)
+select name,profile,circle_id,CONCAT(city1,' ',city2),address from imp_company;
+
+update imp_company
+inner join `company` on imp_company.name = `company`.`name`
+set company_id=`company`.id;
+
+insert into `company_user`(company_id,user_id,position,territory,isadmin,`status`)
+select company_id,user_id,position,'全国','Y',1 from imp_company;

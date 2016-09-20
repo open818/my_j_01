@@ -12,42 +12,11 @@
         </div>
 
         <div class="row" style="margin: 6px 0;">
-            <b>{{$company->dynamic->user_name}}</b> 发布了一条动态
+            <b>{{$company->business_address}} {{$company->address_details}}</b>
         </div>
 
-        <div class="well">
-            <p style="font-size: 16px;">{{$company->dynamic->content}}</p><br><br>
-            @if(count($company->dynamic->attachments) > 0)
-                <div class="mail-attachment">
-                    <p>
-                        <span><i class="fa fa-paperclip"></i> {{count($company->dynamic->attachments)}} 个附件</span>
-                    </p>
-
-                    <div class="attachment">
-                        @foreach($company->dynamic->attachments as $att)
-                            <div class="file-box">
-                                <div class="file">
-                                    <span class="corner"></span>
-                                    <a href="file/{{$att->path}}" target="_blank">
-                                        @if(in_array($att->ext,array('png','jpg','gif')))
-                                            <div class="image">
-                                                <img alt="image" class="img-responsive" src="img/{{$att->path}}">
-                                            </div>
-                                        @else
-                                            <div class="icon">
-                                                {{$att->name}}
-                                            </div>
-                                        @endif
-                                    </a>
-                                </div>
-                            </div>
-                        @endforeach
-                        <div class="clearfix"></div>
-                    </div>
-
-                    <small class="block text-muted"><i class="fa fa-clock-o"></i>发布于 {{$company->dynamic->created_at}}</small>
-                </div>
-            @endif
+        <div class="row" style="max-height: 50px;white-space:nowrap; text-overflow:ellipsis; -o-text-overflow:ellipsis; overflow:hidden;">
+            {{$company->profile}}
         </div>
 
         {{--<div class="btn-group">
