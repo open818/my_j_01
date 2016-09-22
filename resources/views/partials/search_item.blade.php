@@ -15,8 +15,8 @@
             <b>{{$company->business_address}} {{$company->address_details}}</b>
         </div>
 
-        <div class="row" style="max-height: 50px;white-space:nowrap; text-overflow:ellipsis; -o-text-overflow:ellipsis; overflow:hidden;">
-            {{$company->profile}}
+        <div class="row dotdotdot" style="padding-left: 15px;padding-right: 15px;">
+            <pre style="white-space: pre-wrap;word-wrap: break-word;border: 0px;">{{$company->profile}}</pre>
         </div>
 
         {{--<div class="btn-group">

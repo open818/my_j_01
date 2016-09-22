@@ -5,8 +5,11 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="baidu-site-verification" content="hUBTJDeRlW" />
 		<base href="/">
-		<meta name="description" content="">
+		{{--<meta name="Keywords" content="圈子,渠道,人脉,生意,圈子,商机,信息,生意,轻松,商有道">--}}
+		<meta name="Keywords" content="代理商,批发市场,九星市场,北京东路,五金工具,机械设备,泵阀管件,轴承传动,紧固件,电工电气,安全防护,仪器仪表,灯饰照明,化工涂料,办公清洁,五金建材,家居家具,酒店用品,汽车用品,包装材料,物料搬运,暖通设备,商有道">
+		<meta name="description" content="商有道，帮助类似上海九星市场、北京东路批发市场中的商户们经营转型，提供更简单又免费的网络渠道，建立和扩展自己的生意圈，在更宽广的市场推广自己的企业，让老客户不丢，新客户源源不断，让做生意更轻松。主要行业：五金工具、机械设备、泵阀管件、轴承传动、紧固件、电工电气、安全防护、仪器仪表、灯饰照明、化工涂料、办公清洁、五金建材、家居家具、酒店用品、汽车用品、包装材料、物料搬运、暖通设备。">
 		<meta name="author" content="">
 	@show
 

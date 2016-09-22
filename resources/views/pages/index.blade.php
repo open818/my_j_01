@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title')@parent - 首页 @stop
+@section('title')@parent - 找圈子、找渠道、找人脉，扩生意圈子，展商机信息，让做生意更轻松！ @stop
 
 @section('content')
     <section class="products_view">

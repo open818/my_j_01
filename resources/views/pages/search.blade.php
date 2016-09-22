@@ -63,6 +63,7 @@
 
 @section('scripts')
     @parent
+    {!! Html::script('/bower/jQuery.dotdotdot/src/jquery.dotdotdot.min.js') !!}
     <script>
         var lastid = 0;
         var id3 = '';
@@ -82,6 +83,14 @@
                             var _ul = $('.search_company > ul');
                             $(data.html).appendTo(_ul);
                             lastid = data.lastid;
+                            $(".dotdotdot").dotdotdot({
+                                ellipsis	: '...',
+                                wrap		: 'word',
+                                fallbackToLetter: true,
+                                after		: null,
+                                watch		: false,
+                                height		: 80
+                            });
                         }else{
                             if(lastid == 0){
                                 $("#item_end").html('查询暂无数据').show();
