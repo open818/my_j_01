@@ -13,6 +13,9 @@
 
         <div class="row" style="margin: 6px 0;">
             <b>{{$company->business_address}} {{$company->address_details}}</b>
+            @if($company->circle)
+                ({{$company->circle->name}})
+            @endif
         </div>
 
         <div class="row dotdotdot" style="padding-left: 15px;padding-right: 15px;">

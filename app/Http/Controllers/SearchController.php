@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\File;
 use App\Models\Brand;
+use App\Models\BusinessCircle;
 use App\Models\Category;
 use App\Models\Company;
 use App\Models\CompanyDynamic;
@@ -16,7 +17,7 @@ use \Validator;
 
 class SearchController extends Controller
 {
-    private $page_size = 2;
+    private $page_size = 5;
 
     public function __construct()
     {
@@ -27,7 +28,7 @@ class SearchController extends Controller
         $search_key = '%'.$search_key.'%';
 
         //供应商表
-        return Company::where('status', 1)->Where(function($query) use($search_key){
+        return Company::with('circle')->where('status', 1)->Where(function($query) use($search_key){
             //3、联系人
             $match_companyuser = CompanyUser::where('status',1)->whereHas('user', function($query) use($search_key){
                 $query->where('name','like',$search_key)->orWhere('mobile','like',$search_key);
@@ -78,14 +79,28 @@ class SearchController extends Controller
     public function ajax_search($search_key, $page = 1)
     {
         $area = request()->input('area', '');
+        $circle_id = request()->input('circle_id', 0);
         //供应商表
         $query = $this->getSearchQuery($search_key);
 
+        $circles = array();
         if(!empty($area)){
             $query->where("business_address","like", $area.'%');
+
+            if($page == 1 && $circle_id == 0){
+                $other_query = clone $query;
+                $circle_ids = $other_query->whereNotNull('business_circle_id')->distinct()->lists('business_circle_id');
+                if(count($circle_ids)>0){
+                    $circles = BusinessCircle::whereIn('id', $circle_ids)->get(['id','name'])->toArray();
+                }
+            }
+
+            if($circle_id > 0){
+                $query->where("business_circle_id",$circle_id);
+            }
         }
 
-        $companies = $query->orderBy('sort_score', 'desc')->take($this->page_size)->skip($this->page_size*$page)->get();
+        $companies = $query->orderBy('sort_score', 'desc')->take($this->page_size)->skip($this->page_size*($page-1))->get();
 
         if(count($companies) == 0){
             return response()->json(['count'=>0]);
@@ -105,6 +120,6 @@ class SearchController extends Controller
         }*/
         //return view('partials.search_item', ['data'=>$companies]);
         $view = view('partials.search_item', ['data'=>$companies]);
-        return response()->json(['count'=>count($companies), 'html'=> (string)$view, 'lastid'=>$page+1]);
+        return response()->json(['count'=>count($companies), 'html'=> (string)$view, 'lastid'=>$page+1, 'circles'=>$circles]);
     }
 }

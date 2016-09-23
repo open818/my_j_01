@@ -32,7 +32,7 @@
 @section('panel_left_content')
     <div class="panel panel-default">
         <div class="panel-heading">
-            联系人
+            联系人<small>(点击用户查看联系方式）</small>
         </div>
         <div class="panel-body">
             <table class="table table-hover">

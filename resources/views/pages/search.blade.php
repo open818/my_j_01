@@ -14,15 +14,18 @@
                         搜索结果
                     </div>
                     <div class="panel-body">
-                        <div style="margin-bottom: 10px;">
+                        <div id="conditions" style="margin-bottom: 10px;">
                             @if(!empty($province_s))
-                            <div class="search_condition" data-index="3">
-                                地区：<a class="active condition">所有</a>
+                            <div class="search_condition" data-index="1">
+                                地区：<button class="active condition">所有</button>
                                 @foreach($province_s as $key => $v)
-                                    <a class="condition" data-id="{{$key}}">{{$v}}</a>
+                                    <button class="condition" data-id="{{$key}}">{{$v}}</button>
                                 @endforeach
                             </div>
                             @endif
+
+                            <div id="condition_circle" class="search_condition" data-index="2">
+                            </div>
                         </div>
 
                         <div class="search_company">
@@ -65,8 +68,9 @@
     @parent
     {!! Html::script('/bower/jQuery.dotdotdot/src/jquery.dotdotdot.min.js') !!}
     <script>
-        var lastid = 0;
-        var id3 = '';
+        var lastid = 1;
+        var id1 = '';
+        var id2 = 0;
         var loading = false;
 
         function loadDynamicData(){
@@ -77,9 +81,19 @@
                 $.ajax({
                     type: 'GET',
                     url: url ,
-                    data: {area:id3},
+                    data: {area:id1, circle_id:id2},
                     success: function(data) {
                         if(data.count > 0){
+                            if(data.circles.length > 0){
+                                var circle_html = '商圈：<button class="active condition">所有</button>'
+                                for(var o in data.circles){
+                                    circle_html = circle_html + '<button class="condition" data-id="'+data.circles[o].id+'">'+data.circles[o].name+'</button>';
+                                }
+                                $('#condition_circle').html(circle_html);
+                            }else if(id2 == 0){
+                                $('#condition_circle').html('商圈：<button class="active condition">所有</button>');
+                            }
+
                             var _ul = $('.search_company > ul');
                             $(data.html).appendTo(_ul);
                             lastid = data.lastid;
@@ -106,19 +120,25 @@
             }
         }
 
-        $(".condition").click(function(){
+        $('#conditions').on('click','.condition', function(){
             if($(this).hasClass('active')){
                 return '';
             }
 
             var index = $(this).parent().attr('data-index');
             var v = $(this).attr('data-id');
-            lastid=0;
-            eval( "id"+ index +" ='"+v+"';");
+            lastid=1;
+            if(index == 1){
+                id1 = v;
+                id2 = 0;
+                $('#condition_circle').html();
+            }else if(index == 2){
+                id2 = v;
+            }
             $('.search_company > ul').html('');
             $("#item_end").hide();
             loadDynamicData();
-            $(this).parent().children('a').removeClass('active');
+            $(this).parent().children('button').removeClass('active');
             $(this).addClass('active');
         });
 

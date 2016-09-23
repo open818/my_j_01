@@ -7365,14 +7365,14 @@ ul.tab-list li {  list-style: none;  }
 .search_condition button{
   font-size: 10px;
   background-color: #f3f3f4;
-  padding: 5px 12px;
+  padding: 5px 5px;
   color: inherit;
   border-radius: 2px;
   border: 1px solid #e7eaec;
   margin-right: 5px;
   margin-top: 5px;
   cursor:pointer;
-  line-height: 30px;
+  line-height: 20px;
 }
 
 .search_condition button.active{

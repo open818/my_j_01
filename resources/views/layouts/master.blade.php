@@ -40,11 +40,11 @@
 	@show
 
 	{{-- Breadcrumbs section --}}
-	<div class="container">
+	{{--<div class="container">
 		@section('breadcrumbs')
 			<div class="row">&nbsp;</div>
 		@show
-	</div>
+	</div>--}}
 
 	{{-- Content page --}}
 	@section('content')
@@ -119,7 +119,7 @@
 				return '';
 			}
 
-			location.href = "search/"+key;
+			location.href = "/search/"+key;
 		});
 
 		@if(Session::has('alert_message'))
