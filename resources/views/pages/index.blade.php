@@ -40,6 +40,38 @@
                             @endforeach
 
                         </div> {{-- end carousel-inner --}}
+
+                        <!-- 模态框（Modal） -->
+                        <div class="modal fade" id="message_modal" tabindex="-1" role="dialog"
+                             aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close"
+                                                data-dismiss="modal" aria-hidden="true">
+                                            &times;
+                                        </button>
+                                        <h4 class="modal-title" id="myModalLabel">
+                                            信息留言 - <label id="m_message_user"></label>
+                                        </h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        {!! Form::open(['id'=>'modal_form', 'url'=>'/user/message/add', 'method'=>'post']) !!}
+                                        <input type="hidden" id="m_user_id" name="to">
+                                        <textarea rows="3" id="m_content" name="content" style="width: 100%;"></textarea>
+                                        {!! Form::close() !!}
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default"
+                                                data-dismiss="modal">关闭
+                                        </button>
+                                        <button type="button" id="m_sumit" class="btn btn-primary">
+                                            提交
+                                        </button>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal -->
+                        </div>
                     </div>
                 </div> {{-- end carousel --}}
 
@@ -89,6 +121,8 @@
 
     </section> {{-- end products_view --}}
 @stop {{-- end content --}}
+
+
 
 @section('scripts')
     @parent
@@ -158,6 +192,13 @@
                 loadDynamicData();
                 $(this).parent().children('button').removeClass('active');
                 $(this).addClass('active');
+            });
+
+            $("#m_sumit").click(function(){
+                var content = $('#m_content').val();
+                if($.trim(content) != ''){
+                    $( "#modal_form" ).submit();
+                }
             });
         });
 
