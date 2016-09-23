@@ -46,10 +46,9 @@
                         @endforeach
                         <div class="clearfix"></div>
                     </div>
-
-                    <small class="block text-muted"><i class="fa fa-clock-o"></i>发布于 {{$dynamic->created_at}}</small>
                 </div>
             @endif
+            <small class="block text-muted"><i class="fa fa-clock-o"></i>发布于 {{$dynamic->created_at}}</small>
         </div>
 
         {{--<div class="btn-group">

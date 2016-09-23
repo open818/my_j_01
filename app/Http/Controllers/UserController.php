@@ -31,13 +31,14 @@ class UserController extends Controller
         $v = Validator::make($request->all(), [
             'name' => 'required|max:10',
             'email'  => 'email',
-            'QQ'  => 'digits_between:100000,90000000000',
+            'QQ'  => 'numeric|min:100000',
             'phone' => 'regex:/^(0[0-9]{2,3}\-)?([2-9][0-9]{6,7})+(\-[0-9]{1,4})?$/',
         ],[
             'name.required' => '真实姓名必填',
             'name.max' => '真实姓名过长',
             'email.email' => '电子邮箱格式不对',
-            'QQ.digits_between' => 'QQ号格式不正确',
+            'QQ.numeric' => 'QQ号格式不正确',
+            'QQ.min' => 'QQ号格式不正确',
             'phone.regex' => '座机格式不正确',
         ]);
 

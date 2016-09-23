@@ -19,7 +19,7 @@ use \Validator;
 
 class CompanyDynamicController extends Controller
 {
-    private $page_size = 2;
+    private $page_size = 5;
 
     public function dynamic_add(){
         if(empty(Auth::user()->company)){
