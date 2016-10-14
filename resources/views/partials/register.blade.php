@@ -34,21 +34,21 @@
             </div>
         </div>
 
-        <div class="form-group{{ $errors->has('code') ? ' has-error' : '' }}">
+        <div class="form-group{{ $errors->has('verifyCode') ? ' has-error' : '' }}">
             <label for="code" class="col-md-4 control-label">验证码：</label>
 
             <div class="col-md-6">
                 <div class="input-group">
-                    <input id="code" type="text" class="form-control" name="code">
+                    <input id="code" type="text" class="form-control" name="verifyCode">
                     <span class="input-group-btn">
-                        <button type="button" class="btn btn-primary">
+                        <button type="button" id="btn_send_sms" class="btn btn-primary">
                             <i class="fa fa-btn fa-sign-in"></i> 获取验证码
                         </button>
                     </span>
                 </div>
-                    @if ($errors->has('code'))
+                    @if ($errors->has('verifyCode'))
                         <span class="help-block">
-                        <strong>{{ $errors->first('code') }}</strong>
+                        <strong>{{ $errors->first('verifyCode') }}</strong>
                     </span>
                     @endif
 
@@ -88,3 +88,20 @@
         {!! Form::close() !!}
     </div>
 </div>
+<script>
+    $('#btn_send_sms').sms({
+        //laravel csrf token
+        token       : "{{csrf_token()}}",
+        //请求间隔时间
+        interval    : 60,
+        //请求参数
+        requestData : {
+            //手机号
+            mobile : function () {
+                return $('#mobile').val();
+            },
+            //手机号的检测规则
+            mobile_rule : 'mobile_required'
+        }
+    });
+</script>

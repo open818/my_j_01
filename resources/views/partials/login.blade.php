@@ -9,13 +9,13 @@
         <div class="form-group">
             <div class="col-md-6">
                 <label for="login_switch1">
-                    <input type="radio" name="phone-login" id="login_switch1" onclick="toGetFWCode()" checked="">
+                    <input type="radio" name="phone-login" id="login_switch1" onclick="toGetFWCode()" @if(!old('phone-login') || old('phone-login') == 'psw') checked="" @endif  value="psw">
                     <span>服务密码</span>
                 </label>
             </div>
             <div class="col-md-6">
                 <label for="login_switch2">
-                    <input type="radio" name="phone-login" id="login_switch2" onclick="toGetSMSCode()">
+                    <input type="radio" name="phone-login" id="login_switch2" onclick="toGetSMSCode()" @if(old('phone-login') && old('phone-login') == 'sms') checked="" @endif value="sms">
                     <span>短信密码</span>
                 </label>
             </div>
@@ -23,7 +23,7 @@
 
         <div class="form-group{{ $errors->has('mobile') ? ' has-error' : '' }}">
             <div class="col-md-12">
-                <input id="mobile" type="tel" placeholder="手机号" class="form-control" name="mobile" value="{{ old('mobile') }}">
+                <input id="mobile" type="number" placeholder="手机号" class="form-control" name="mobile" value="{{ old('mobile') }}">
 
                 @if ($errors->has('mobile'))
                     <span class="help-block">
@@ -33,7 +33,7 @@
             </div>
         </div>
 
-        <div id="div_psw" class="form-group{{ $errors->has('password') ? ' has-error' : '' }} show">
+        <div id="div_psw" class="form-group{{ $errors->has('password') ? ' has-error' : '' }} @if(old('phone-login') && old('phone-login') == 'sms') hidden @endif">
             <div class="col-md-12">
                 <input id="password" placeholder="登录密码"  type="password" class="form-control" name="password">
 
@@ -45,19 +45,19 @@
             </div>
         </div>
 
-        <div id="div_code" class="form-group{{ $errors->has('code') ? ' has-error' : '' }} hidden">
+        <div id="div_code" class="form-group{{ $errors->has('verifyCode') ? ' has-error' : '' }} @if(old('phone-login') && old('phone-login') == 'sms') show @else hidden @endif">
             <div class="col-md-12">
                 <div class="input-group">
-                    <input id="code" placeholder="短信验证码" type="text" class="form-control" name="code">
+                    <input id="code" placeholder="短信验证码" type="text" class="form-control" name="verifyCode">
                     <span class="input-group-btn">
-                        <button type="button" class="btn btn-primary">
+                        <button type="button" id="btn_send_sms" class="btn btn-primary">
                             <i class="fa fa-btn fa-sign-in"></i> 获取验证码
                         </button>
                     </span>
                 </div>
-                @if ($errors->has('code'))
+                @if ($errors->has('verifyCode'))
                     <span class="help-block">
-                        <strong>{{ $errors->first('code') }}</strong>
+                        <strong>{{ $errors->first('verifyCode') }}</strong>
                     </span>
                 @endif
             </div>
@@ -97,4 +97,20 @@
         $("#div_psw").removeClass("show");
         $("#div_psw").addClass("hidden");
     }
+
+    $('#btn_send_sms').sms({
+        //laravel csrf token
+        token       : "{{csrf_token()}}",
+        //请求间隔时间
+        interval    : 60,
+        //请求参数
+        requestData : {
+            //手机号
+            mobile : function () {
+                return $('#mobile').val();
+            },
+            //手机号的检测规则
+            mobile_rule : 'mobile_required'
+        }
+    });
 </script>

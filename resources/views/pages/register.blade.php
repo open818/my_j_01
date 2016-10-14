@@ -2,7 +2,8 @@
 <html>
 <head>
     <title>Laravel</title>
-
+    {!! Html::script('/bower/jquery/dist/jquery.min.js') !!}
+    {!! Html::script('/js/laravel-sms.js') !!}
     <!-- Bootstrap Core CSS -->
     {!! Html::style('/bower/bootstrap/dist/css/bootstrap.css') !!}
 

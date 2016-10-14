@@ -6,6 +6,7 @@ use App\Models\CompanyUser;
 use Auth;
 use App\Models\LogUserLogin;
 use App\Models\User;
+use Toplan\Sms\Facades\SmsManager;
 use Validator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -58,7 +59,7 @@ class AuthController extends Controller
         return Validator::make($data, [
             'name' => 'required|max:10',
             'mobile' => 'required|regex:/^1[34578][0-9]{9}$/|unique:user',
-            'code'  => 'required|regex:/^666666$/',
+            'verifyCode'  => 'required|verify_code',
             'password' => 'required|min:6|max:20',
         ],[
             'name.required' => '真实姓名必填',
@@ -66,8 +67,8 @@ class AuthController extends Controller
             'mobile.required' => '手机号必填',
             'mobile.regex' => '手机号格式不正确',
             'mobile.unique' => '当前手机号已注册',
-            'code.required' => '手机验证码不能为空',
-            'code.regex' => '手机验证码不正确',
+            'verifyCode.required'   => '手机验证码不能为空',
+            'verifyCode.verify_code' => '手机验证码不正确',
             'password.required' => '密码必填',
             'password.min' => '密码长度过短',
             'password.max' => '密码长度过长',
@@ -82,9 +83,11 @@ class AuthController extends Controller
     {
         $this->validate($request, [
             $this->loginUsername() => 'required',
-            'password' => 'required',
+            'phone-login'   => 'required'
+            //'password' => 'required',
         ],[
             $this->loginUsername().'.required' => '手机号不能为空',
+            'phone-login'   => '访问错误',
             'password.required' => '密码不能为空',
         ]);
     }
@@ -112,17 +115,35 @@ class AuthController extends Controller
 
         $credentials = $this->getCredentials($request);
 
-        if (Auth::guard($this->getGuard())->attempt($credentials, $request->has('remember'))) {
-            //写入登录日志
-            $log_data = [
-                'user_id'=>Auth::user()->id,
-                'login_mobile'=>$request->input($this->loginUsername()),
-                'login_ip'=>$request->ip(),
-                'source'=>'浏览器',
-                'user_agent'=>$request->header('user-agent')
-            ];
-            $this->login_logs($log_data);
-            return $this->handleUserWasAuthenticated($request, $throttles);
+        if($request->input('phone-login') == 'sms'){
+            $guard = Auth::guard($this->getGuard());
+
+            $user = $guard->getProvider()->retrieveByCredentials($credentials);
+            if($user){
+
+                $validator = Validator::make($request->all(), [
+                    'verifyCode' => 'required|verify_code',
+                ], [
+                    'verifyCode.required'   => '验证码不能为空',
+                    'verifyCode.verify_code' => '验证码不正确',
+                ]);
+                if ($validator->fails()) {
+                    //验证失败后建议清空存储的发送状态，防止用户重复试错
+                    //SmsManager::forgetState();
+                    return $this->throwValidationException($request, $validator);
+                    //return redirect()->back()->withErrors($validator);
+                }
+
+                $guard->login($user, $request->has('remember'));
+                $this->login_logs($request);
+                return $this->handleUserWasAuthenticated($request, $throttles);
+            }
+        }else{
+            if (Auth::guard($this->getGuard())->attempt($credentials, $request->has('remember'))) {
+                //写入登录日志
+                $this->login_logs($request);
+                return $this->handleUserWasAuthenticated($request, $throttles);
+            }
         }
 
         // If the login attempt was unsuccessful we will increment the number of attempts
@@ -132,7 +153,12 @@ class AuthController extends Controller
             $this->incrementLoginAttempts($request);
         }
 
-        return $this->sendFailedLoginResponse($request);
+        return redirect()->back()
+            ->withInput($request->only($this->loginUsername(), 'phone-login'))
+            ->withErrors([
+                $this->loginUsername() => $this->getFailedLoginMessage(),
+            ]);
+        //return $this->sendFailedLoginResponse($request);
     }
 
     /**
@@ -152,7 +178,14 @@ class AuthController extends Controller
         ]);
     }
 
-    private function login_logs($data){
+    private function login_logs($request){
+        $data = [
+            'user_id'=>Auth::user()->id,
+            'login_mobile'=>Auth::user()->mobile,
+            'login_ip'=>$request->ip(),
+            'source'=>'浏览器',
+            'user_agent'=>$request->header('user-agent')
+        ];
         LogUserLogin::create($data);
     }
 }

@@ -14,6 +14,10 @@
 	@show
 
 	<link rel="icon" href="favicon.ico">
+	{!! Html::script('/bower/jquery/dist/jquery.min.js') !!}
+	{!! Html::script('/bower/bootstrap/dist/js/bootstrap.min.js') !!}
+	{!! Html::script('/js/app.js') !!}
+	{!! Html::script('/js/laravel-sms.js') !!}
 	<title>@section('title') 商有道 @show</title>
 
 	{{-- CSS files --}}
@@ -94,9 +98,6 @@
 	</footer>
 @show
 
-{!! Html::script('/bower/jquery/dist/jquery.min.js') !!}
-{!! Html::script('/bower/bootstrap/dist/js/bootstrap.min.js') !!}
-{!! Html::script('/js/app.js') !!}
 <script>
 	$(function(){
 		$("body").click(function(){

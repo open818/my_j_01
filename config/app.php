@@ -159,6 +159,9 @@ return [
         Collective\Html\HtmlServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
+
+        Toplan\PhpSms\PhpSmsServiceProvider::class,
+        Toplan\Sms\SmsManagerServiceProvider::class,
     ],
 
     /*
@@ -209,6 +212,8 @@ return [
         'Html'        => Collective\Html\HtmlFacade::class,
         'Image'       => Intervention\Image\Facades\Image::class,
         'Debugbar'    => Barryvdh\Debugbar\Facade::class,
+        'PhpSms' => Toplan\PhpSms\Facades\Sms::class,
+        'SmsManager' => Toplan\Sms\Facades\SmsManager::class,
     ],
 
 ];
