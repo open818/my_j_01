@@ -53,6 +53,10 @@ class UserController extends Controller
         return redirect()->back();
     }
 
+    public function reset(){
+        return view('pages.user_reset');
+    }
+
     public function relevancy_company(){
         $company = Auth::user()->company;
         if(!empty($company)){

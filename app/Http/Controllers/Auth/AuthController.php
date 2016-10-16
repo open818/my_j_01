@@ -127,7 +127,7 @@ class AuthController extends Controller
                     'verifyCode.required'   => '验证码不能为空',
                     'verifyCode.verify_code' => '验证码不正确',
                 ]);
-                if ($validator->fails()) {
+                if ($validator->fails()) {print_r(567);
                     //验证失败后建议清空存储的发送状态，防止用户重复试错
                     //SmsManager::forgetState();
                     return $this->throwValidationException($request, $validator);

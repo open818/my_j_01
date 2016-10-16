@@ -38,7 +38,7 @@
 <div class="container">
     <div class="row" style="text-align: center;"><img style="height: 80px;" src="/img/logo.png" alt="商有道"></div>
     <div class="content">
-        @include("partials.register")
+        @include("partials.password")
     </div>
 </div>
 </body>

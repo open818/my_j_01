@@ -10,13 +10,13 @@
             <div class="col-md-6">
                 <label for="login_switch1">
                     <input type="radio" name="phone-login" id="login_switch1" onclick="toGetFWCode()" @if(!old('phone-login') || old('phone-login') == 'psw') checked="" @endif  value="psw">
-                    <span>服务密码</span>
+                    <span>密码验证登录</span>
                 </label>
             </div>
             <div class="col-md-6">
                 <label for="login_switch2">
                     <input type="radio" name="phone-login" id="login_switch2" onclick="toGetSMSCode()" @if(old('phone-login') && old('phone-login') == 'sms') checked="" @endif value="sms">
-                    <span>短信密码</span>
+                    <span>短信验证登录</span>
                 </label>
             </div>
         </div>

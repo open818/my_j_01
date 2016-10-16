@@ -15,5 +15,6 @@ return [
 
     'failed' => '手机号或密码不正确.',
     'throttle' => '登录次数太多，请在 :seconds 秒后尝试.',
+    'resetFailed' => '手机号不正确.',
 
 ];

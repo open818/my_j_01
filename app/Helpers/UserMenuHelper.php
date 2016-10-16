@@ -19,6 +19,7 @@ class UserMenuHelper
         $menu = [
             ['route' => '/',            'text' => '首页',              'icon' => 'glyphicon glyphicon-dashboard'],
             ['route' => '/user/profile',    'text' => '个人设置',        'icon' => 'glyphicon glyphicon-cog'],
+            ['route' => '/user/reset',    'text' => '重置密码',        'icon' => 'glyphicon glyphicon-cog'],
             ['route' => '/user/relevancy', 'text' => '企业关联', 'icon' => 'glyphicon glyphicon-tasks'],
             ['route' => '/user/message/show', 'text' => '留言信息', 'icon' => 'fa fa-comments', 'num'=>$cn],
         ];

@@ -54,6 +54,7 @@ Route::auth();
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/user/profile', "UserController@profile");
+    Route::get('/user/reset', "UserController@reset");
     Route::get('/user/relevancy', "UserController@relevancy_company");
     Route::post('/user/relevancy', "UserController@saveRelevancy");
     Route::post('/user/saveProfile', "UserController@saveProfile");
